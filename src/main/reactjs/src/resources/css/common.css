@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=Homemade+Apple&family=Nanum+Myeongjo&family=Noto+Sans+KR:wght@100&family=Reenie+Beanie&family=Sassy+Frass&family=Song+Myung&display=swap');
+
+body * {
+    margin: 0;
+    font-family: 'Noto Sans KR', cursive;
+}
+
+.common {
+    display: grid;
+    justify-content: center;
+    gap: 50px;
+}
+
+.common {
+    margin-bottom: 30px;
+}
+
+.common-header,
+.common-nav {
+    font-family: 'Homemade Apple', cursive !important;
+    text-align: center;
+}
+
+.common-header {
+    height: 200px;
+    display: grid;
+    text-align: center;
+}
+
+.common .logo {
+    display: grid;
+    align-items: center;
+    font-size: 30pt;
+}
+
+.common-nav {
+    width: 1280px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.common-header *:hover,
+.common-nav *:hover {
+    cursor: pointer;
+    text-shadow: 2px 2px 0 gold;
+}

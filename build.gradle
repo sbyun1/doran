@@ -66,6 +66,13 @@ task installReact(type: Exec) {
         commandLine 'npm', 'install'
     }
 }
+
+task copyReactBuildFiles(type: Copy) {
+    dependsOn "buildReact"
+    from "$webappDir/build"
+    into "$webappDir/src/main/resources/static"
+}
+
 tasks.named('test') {
     useJUnitPlatform()
 }

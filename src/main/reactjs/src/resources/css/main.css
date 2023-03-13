@@ -1,0 +1,176 @@
+.main-container {
+    display: grid;
+    justify-content: center;
+    gap: 30px;
+}
+
+.product-category {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    font-weight: 700;
+    border: solid gray 1px;
+}
+
+.product-category>* {
+    padding: 15px 0 15px 0;
+    text-align: center;
+    transition: 0.1s;
+}
+
+.product-category>*:hover {
+    cursor: pointer;
+    background-color: gold;
+    color: white;
+}
+
+.product-category *.option-selected {
+    background-color: gray;
+    color: white;
+}
+
+.product-search {
+    display: grid;
+    grid-template-columns: 20% 10% auto;
+    justify-content: end;
+    gap: 10px;
+}
+
+.product-search>* {
+    padding: 10px;
+    border: none;
+    transition: 0.1s;
+}
+
+.product-search>input[type="text"] {
+    border: solid 0.5px gainsboro;
+}
+
+.product-search>input[type="button"]:hover {
+    font-weight: 700;
+    color: white;
+    cursor: pointer;
+    background-color: gold;
+}
+
+.product-list {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    justify-items: center;
+    border-top: none;
+    gap: 10px;
+    background-color: rgba(252, 252, 252);
+}
+
+.product-figure>*:nth-child(3):hover {
+    cursor: pointer;
+}
+
+.product-figure {
+    position: relative;
+    width: 312.5px;
+}
+
+.item-info {
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    gap: 30px;
+    padding: 50px 0 50px 0;
+}
+
+.item-info>*:first-child {
+    font-size: small;
+}
+
+.item-info>*:nth-child(2) {
+    font-weight: 700;
+}
+
+.item-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    justify-items: center;
+    align-items: center;
+}
+
+.item-options.single>* {
+    grid-column-start: 1;
+    grid-column-end: 3;
+}
+
+.item-options>* {
+    width: 100px;
+    display: grid;
+    gap: 10px;
+    text-align: center;
+    font-size: small;
+}
+
+.item-options>*>*:last-child {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border: none;
+    background-color: gainsboro;
+    transition: 0.1s;
+}
+
+.item-options>*>*:last-child:hover {
+    background-color: gold;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.item-name:hover {
+    cursor: pointer;
+}
+
+.item-details {
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: white;
+    border: solid 1px gray;
+}
+
+.item-details.shown {
+    display: grid;
+    justify-items: center;
+    align-items: center;
+}
+
+.item-details>*:first-child {
+    font-size: large;
+    font-weight: 700;
+}
+
+.item-details>*:nth-child(2) {
+    width: 80%;
+}
+
+.item-details>.close {
+    position: absolute;
+    padding: 5px 10px 5px 10px;
+    right: 0;
+    top: 0;
+    background-color: gainsboro;
+    border: solid 1px gray;
+    border-top: none;
+    border-right: none;
+}
+
+.item-details>.close:after {
+    content: '\00d7';
+    font-size: large;
+}
+
+.item-details>.close:hover {
+    background-color: gold;
+    cursor: pointer;
+}
+
+
+@media screen and (max-width: 768px) {}
