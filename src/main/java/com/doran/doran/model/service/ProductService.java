@@ -54,6 +54,24 @@ public class ProductService {
         return list;
     }
 
+    public List<MenuDto> findByKeyword(String keyword) {
+        List<MenuDto> list = new ArrayList<>();
+        productRepository.findByProductNameContaining(keyword).forEach(p -> {
+            MenuDto dto = new MenuDto();
+
+            // Response로 보내기 적절한 타입으로 Entity를 Dto로 변환
+            dto.setCategoryName(p.getCategory().getCategoryName());
+            dto.setProductId(p.getProductId());
+            dto.setProductName(p.getProductName());
+            dto.setProductDesc(p.getProductDesc());
+            dto.setProductOptions(p.getOptions());
+
+            list.add(dto);
+        });
+        
+        return list;
+    }
+
     public Optional<Product> findById(Integer productId) {
         Optional<Product> product = productRepository.findById(productId);
         return product;

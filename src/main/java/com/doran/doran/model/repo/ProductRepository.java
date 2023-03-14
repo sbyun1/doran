@@ -10,5 +10,7 @@ import java.util.Optional;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Integer> {
-    public List<Product> findByCategory(Optional<Category> category);
+    List<Product> findByCategory(Optional<Category> category);
+
+    List<Product> findByProductNameContaining(String keyword);
 }

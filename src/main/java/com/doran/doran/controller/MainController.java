@@ -24,33 +24,34 @@ public class MainController {
 
     @GetMapping("/menu/init")
     public ResponseEntity find() {
-        Map<String, Object> response = new HashMap<>();
+        Map<String, Object> res = new HashMap<>();
 
         List<MenuDto> products = productService.findAll();
         List<CategoryDto> categories = categoryService.findAll();
 
-        response.put("products", products);
-        response.put("categories", categories);
+        res.put("products", products);
+        res.put("categories", categories);
 
-        return new ResponseEntity(response, HttpStatus.OK);
-    }
-
-    @GetMapping("/menu/findAllProducts")
-    public ResponseEntity fintAllProducts() {
-        List<MenuDto> products = productService.findAll();
-
-        return new ResponseEntity(products, HttpStatus.OK);
+        return new ResponseEntity(res, HttpStatus.OK);
     }
 
     @GetMapping("/menu/findByCategory")
     public ResponseEntity findByCategory(@RequestParam int categoryId) {
-        List<MenuDto> products;
+        List<MenuDto> res;
 
         if (categoryId == 0)
-            products = productService.findAll();
+            res = productService.findAll();
         else
-            products = productService.findByCategory(categoryId);
+            res = productService.findByCategory(categoryId);
 
-        return new ResponseEntity(products, HttpStatus.OK);
+        return new ResponseEntity(res, HttpStatus.OK);
+    }
+
+    @GetMapping("/menu/findByKeyword")
+    public ResponseEntity findByKeyword(@RequestParam String keyword) {
+        List<MenuDto> res = productService.findByKeyword(keyword);
+
+        return new ResponseEntity(res, HttpStatus.OK);
+
     }
 }

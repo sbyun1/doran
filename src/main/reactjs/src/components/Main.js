@@ -7,6 +7,7 @@ import {string} from "bfj/src/events";
 function Main() {
     const [products, setProducts] = useState([]);
     const [categories, setCategroies] = useState([]);
+    const [keyword, setKeyword] = useState('');
 
     useEffect(() => {
         axios.get('/menu/init')
@@ -25,6 +26,13 @@ function Main() {
             });
     }
 
+    const findByKeyword = () => {
+        axios.get('/menu/findByKeyword?keyword=' + keyword)
+            .then(response => {
+                setProducts(response.data);
+            })
+    }
+
     return (
         <div className="main-container">
             <div className="product-category">
@@ -38,8 +46,16 @@ function Main() {
                 }
             </div>
             <div className="product-search">
-                <input type="text" name="keyword"/>
-                <input type="button" value="검색"/>
+                <input type="text" name="keyword" onChange={e => {
+                    setKeyword(e.target.value);
+                }
+                } onKeyPress={(e) => {
+                    if (e.key == 'Enter') {
+                        findByKeyword();
+                    }
+                }
+                }/>
+                <input type="button" value="검색" onClick={findByKeyword}/>
             </div>
             <div className="product-list">
                 {
