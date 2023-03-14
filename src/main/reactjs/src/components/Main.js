@@ -2,7 +2,6 @@ import {useEffect, useState} from "react";
 import '../resources/css/main.css';
 import '../resources/js/main.js';
 import axios from "axios";
-import styled from "styled-components";
 
 function Main() {
     const [products, setProducts] = useState([]);
@@ -16,13 +15,30 @@ function Main() {
             });
     }, []);
 
+    const clickCategory = (event) => {
+        const categoryId = event.target.getAttribute('data-key');
+        if (categoryId === 'all') {
+            axios.get('/menu/findAllProducts')
+                .then(response => {
+                    setProducts(response.data);
+                })
+
+        } else {
+            axios.get('/menu/findByCategory?categoryId=' + categoryId)
+                .then(response => {
+                    setProducts(response.data);
+                })
+        }
+    }
+
     return (
         <div className="main-container">
             <div className="product-category">
-                <span className="option-selected">전체</span>
+                <span className="option-selected" data-key="all">전체</span>
                 {
                     categories.map(category => {
-                        return <span key={category.categoryId}>{category.categoryName}</span>
+                        return <span key={category.categoryId} data-key={category.categoryId}
+                                     onClick={clickCategory}>{category.categoryName}</span>
                     })
                 }
             </div>
@@ -33,7 +49,8 @@ function Main() {
             <div className="product-list">
                 {
                     products.map(product => {
-                        return <Product key={product.productId} product={product}></Product>
+                        return <Product key={product.productId} data-key={product.productId}
+                                        product={product}></Product>
                     })
                 }
             </div>
@@ -42,11 +59,6 @@ function Main() {
 }
 
 function Product({product}) {
-    if (product.productOptions.length == 1) {
-        const singleOptionStyle = {
-            'grid-template-columns': 1
-        }
-    }
     return (
         <div className="product-figure">
             <div className="item-info">
@@ -55,7 +67,8 @@ function Product({product}) {
                 <div className="item-options">
                     {
                         product.productOptions.map(option => {
-                            return <ProductOption key={option.id} option={option}></ProductOption>
+                            return <ProductOption key={option.optionId} data-key={option.optionId}
+                                                  option={option}></ProductOption>
                         })
                     }
                 </div>
@@ -70,10 +83,8 @@ function Product({product}) {
 }
 
 function ProductOption({option}) {
-
     return (
         <div>
-            <input type="hidden" id="option-id" value={option.optionId}/>
             <span>{option.optionName}</span>
             <span>{option.optionPrice}</span>
             <button>+ Cart</button>

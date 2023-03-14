@@ -1,7 +1,9 @@
 package com.doran.doran.model.service;
 
 import com.doran.doran.model.dto.MenuDto;
+import com.doran.doran.model.entity.Category;
 import com.doran.doran.model.entity.Product;
+import com.doran.doran.model.repo.CategoryRepository;
 import com.doran.doran.model.repo.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,8 @@ import java.util.Optional;
 public class ProductService {
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     public List<MenuDto> findAll() {
         List<MenuDto> list = new ArrayList<MenuDto>();
@@ -34,7 +38,8 @@ public class ProductService {
 
     public List<MenuDto> findByCategory(Integer categoryId) {
         List<MenuDto> list = new ArrayList<>();
-        productRepository.findByCategory(categoryId).forEach(p -> {
+        Optional<Category> category = categoryRepository.findById(categoryId);
+        productRepository.findByCategory(category).forEach(p -> {
             MenuDto dto = new MenuDto();
 
             // Response로 보내기 적절한 타입으로 Entity를 Dto로 변환
