@@ -12,12 +12,14 @@ window.onload = function () {
             });
         }
 
-        let _close = Array.from(_item_details.getElementsByClassName('close'))[0];
+        if (_item_details != undefined) {
+            let _close = Array.from(_item_details.getElementsByClassName('close'))[0];
 
-        if (_close != undefined) {
-            _close.addEventListener('click', function (e) {
-                _item_details.classList.toggle('shown');
-            });
+            if (_close != undefined) {
+                _close.addEventListener('click', function (e) {
+                    _item_details.classList.toggle('shown');
+                });
+            }
         }
     });
 }

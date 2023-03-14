@@ -11,13 +11,13 @@
     border: solid gray 1px;
 }
 
-.product-category>* {
+.product-category > * {
     padding: 15px 0 15px 0;
     text-align: center;
     transition: 0.1s;
 }
 
-.product-category>*:hover {
+.product-category > *:hover {
     cursor: pointer;
     background-color: gold;
     color: white;
@@ -35,17 +35,17 @@
     gap: 10px;
 }
 
-.product-search>* {
+.product-search > * {
     padding: 10px;
     border: none;
     transition: 0.1s;
 }
 
-.product-search>input[type="text"] {
+.product-search > input[type="text"] {
     border: solid 0.5px gainsboro;
 }
 
-.product-search>input[type="button"]:hover {
+.product-search > input[type="button"]:hover {
     font-weight: 700;
     color: white;
     cursor: pointer;
@@ -61,7 +61,7 @@
     background-color: rgba(252, 252, 252);
 }
 
-.product-figure>*:nth-child(3):hover {
+.product-figure > *:nth-child(3):hover {
     cursor: pointer;
 }
 
@@ -78,11 +78,11 @@
     padding: 50px 0 50px 0;
 }
 
-.item-info>*:first-child {
+.item-info > *:first-child {
     font-size: small;
 }
 
-.item-info>*:nth-child(2) {
+.item-info > *:nth-child(2) {
     font-weight: 700;
 }
 
@@ -94,12 +94,12 @@
     align-items: center;
 }
 
-.item-options.single>* {
+.item-options.single > * {
     grid-column-start: 1;
     grid-column-end: 3;
 }
 
-.item-options>* {
+.item-options > * {
     width: 100px;
     display: grid;
     gap: 10px;
@@ -107,7 +107,7 @@
     font-size: small;
 }
 
-.item-options>*>*:last-child {
+.item-options > * > *:last-child {
     padding-top: 10px;
     padding-bottom: 10px;
     border: none;
@@ -115,7 +115,7 @@
     transition: 0.1s;
 }
 
-.item-options>*>*:last-child:hover {
+.item-options > * > *:last-child:hover {
     background-color: gold;
     font-weight: 700;
     cursor: pointer;
@@ -142,16 +142,16 @@
     align-items: center;
 }
 
-.item-details>*:first-child {
+.item-details > *:first-child {
     font-size: large;
     font-weight: 700;
 }
 
-.item-details>*:nth-child(2) {
+.item-details > *:nth-child(2) {
     width: 80%;
 }
 
-.item-details>.close {
+.item-details > .close {
     position: absolute;
     padding: 5px 10px 5px 10px;
     right: 0;
@@ -162,15 +162,16 @@
     border-right: none;
 }
 
-.item-details>.close:after {
+.item-details > .close:after {
     content: '\00d7';
     font-size: large;
 }
 
-.item-details>.close:hover {
+.item-details > .close:hover {
     background-color: gold;
     cursor: pointer;
 }
 
 
-@media screen and (max-width: 768px) {}
+@media screen and (max-width: 768px) {
+}
