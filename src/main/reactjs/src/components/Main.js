@@ -2,6 +2,7 @@ import {useEffect, useState} from "react";
 import '../resources/css/main.css';
 import '../resources/js/main.js';
 import axios from "axios";
+import {string} from "bfj/src/events";
 
 function Main() {
     const [products, setProducts] = useState([]);
@@ -17,24 +18,18 @@ function Main() {
 
     const clickCategory = (event) => {
         const categoryId = event.target.getAttribute('data-key');
-        if (categoryId === 'all') {
-            axios.get('/menu/findAllProducts')
-                .then(response => {
-                    setProducts(response.data);
-                })
 
-        } else {
-            axios.get('/menu/findByCategory?categoryId=' + categoryId)
-                .then(response => {
-                    setProducts(response.data);
-                })
-        }
+        axios.get('/menu/findByCategory?categoryId=' + categoryId)
+            .then(response => {
+                setProducts(response.data);
+            });
     }
 
     return (
         <div className="main-container">
             <div className="product-category">
-                <span className="option-selected" data-key="all">전체</span>
+                <span className="option-selected" data-key="0"
+                      onClick={clickCategory}>전체</span>
                 {
                     categories.map(category => {
                         return <span key={category.categoryId} data-key={category.categoryId}

@@ -44,7 +44,12 @@ public class MainController {
 
     @GetMapping("/menu/findByCategory")
     public ResponseEntity findByCategory(@RequestParam int categoryId) {
-        List<MenuDto> products = productService.findByCategory(categoryId);
+        List<MenuDto> products;
+
+        if (categoryId == 0)
+            products = productService.findAll();
+        else
+            products = productService.findByCategory(categoryId);
 
         return new ResponseEntity(products, HttpStatus.OK);
     }
