@@ -1,6 +1,5 @@
 import {useEffect, useState} from "react";
 import '../resources/css/main.css';
-import '../resources/js/main.js';
 import axios from "axios";
 
 function Main() {
@@ -10,6 +9,7 @@ function Main() {
     const [currentCategory, setCurrentCategory] = useState(0);
     const [maxSize, setMaxSize] = useState(0);
     const [currentSize, setCurrentSize] = useState(0);
+
     const initializeSize = (size) => {
         setMaxSize(size);
         if (currentSize > size)
@@ -26,6 +26,13 @@ function Main() {
                 initializeSize(response.data.products.length);
             });
     }, []);
+
+    const isSelected = (categoryId) => {
+        return currentCategory == categoryId;
+    }
+    const isEndpoint = () => {
+        return currentSize >= maxSize;
+    }
 
     const clickCategory = (event) => {
         const categoryId = event.target.getAttribute('data-key');
@@ -52,13 +59,6 @@ function Main() {
                 setProducts(response.data);
                 initializeSize(response.data.length);
             });
-    }
-
-    const isSelected = (categoryId) => {
-        return currentCategory == categoryId;
-    }
-    const isEndpoint = () => {
-        return currentSize >= maxSize;
     }
 
     return (
@@ -108,11 +108,17 @@ function Product({product}) {
         return optionLength === 1;
     }
 
+    const showItemDetails = (event) => {
+        console.log(event)
+    }
+
     return (
         <div className="product-figure">
             <div className="item-info">
-                <span>{product.categoryName}</span>
-                <span className="item-name">{product.productName}</span>
+                <div className="item-info-product">
+                    <span>{product.categoryName}</span>
+                    <span className="item-name">{product.productName}</span>
+                </div>
                 <div className={`item-options ${isSingle(product.productOptions.length) ? "single" : null}`}>
                     {
                         product.productOptions.map(option => {
