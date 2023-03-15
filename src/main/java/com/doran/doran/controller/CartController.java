@@ -2,6 +2,7 @@ package com.doran.doran.controller;
 
 import com.doran.doran.model.dto.OrderItemDto;
 import com.doran.doran.model.service.ProductService;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @RestController
@@ -31,10 +34,13 @@ public class CartController {
             if (cart == null) {
                 List<OrderItemDto> newCart = new ArrayList<>();
                 newCart.add(item);
+                cart = newCart;
             } else {
-                if (cart.contains(item)) {
-                    int cartIndex = cart.indexOf(item);
-                    item.setOptionQuantity(cart.remove(cartIndex).getOptionQuantity() + 1);
+                for (int i = 0; i < cart.size(); i++) {
+                    if (cart.get(i).getOptionId() == item.getOptionId()) {
+                        item.setOptionQuantity(cart.remove(i).getOptionQuantity() + 1);
+                        break;
+                    }
                 }
                 cart.add(item);
             }
@@ -59,9 +65,11 @@ public class CartController {
             if (cart == null) {
                 flag = false;
             } else {
-                if (cart.contains(item)) {
-                    int cartIndex = cart.indexOf(item);
-                    cart.remove(cartIndex);
+                for (int i = 0; i < cart.size(); i++) {
+                    if (cart.get(i).getOptionId() == item.getOptionId()) {
+                        cart.remove(i);
+                        break;
+                    }
                 }
             }
 
@@ -74,9 +82,38 @@ public class CartController {
         return flag;
     }
 
+    @GetMapping("/setQuantity")
+    public boolean setQuantity(@RequestParam("optionId") Integer optionId, @RequestParam("optionQuantity") Integer optionQuantity, HttpSession session) {
+        boolean flag = true;
 
-    @GetMapping("/showList")
-    public ResponseEntity showList(HttpSession session) {
+        try {
+            List<OrderItemDto> cart = (List<OrderItemDto>) session.getAttribute("cart");
+            OrderItemDto item = productService.findByOption(optionId);
+
+            if (cart == null) {
+                flag = false;
+            } else {
+                for (int i = 0; i < cart.size(); i++) {
+                    if (cart.get(i).getOptionId() == item.getOptionId()) {
+                        OrderItemDto dto = cart.remove(i);
+                        dto.setOptionQuantity(optionQuantity);
+                        cart.add(i, dto);
+                        break;
+                    }
+                }
+            }
+
+            session.setAttribute("cart", cart);
+        } catch (Exception e) {
+            e.printStackTrace();
+            flag = false;
+        }
+        return flag;
+    }
+
+
+    @GetMapping("/selectList")
+    public ResponseEntity<List<OrderItemDto>> showList(HttpSession session) {
         return new ResponseEntity(session.getAttribute("cart"), HttpStatus.OK);
     }
 }

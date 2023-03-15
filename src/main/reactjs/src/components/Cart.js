@@ -1,38 +1,30 @@
 import '../resources/css/cart.css'
 import '../resources/css/main.css'
 import {useEffect, useState} from "react";
+import axios from "axios";
 
 function Cart() {
-    const [cartItems, setCartItems] = useState([]);
+    const [cart, setCart] = useState([]);
     const [totalAmount, setTotalAmount] = useState(0);
-    const calculateAmount = (_cartItems) => {
+    const calculateAmount = (_cart) => {
         let currentAmount = 0;
 
-        _cartItems.forEach(ci => {
+        _cart.forEach(ci => {
             currentAmount += ci.optionQuantity * ci.optionUnitPrice;
         });
 
         setTotalAmount(currentAmount);
     }
 
-    useEffect(() => {
-        // 테스트 데이터 설정
-        const data = [{
-            productName: '아메리카노',
-            optionId: 1,
-            optionName: '레귤러 (2샷)',
-            optionQuantity: 5,
-            optionUnitPrice: 3500
-        }, {
-            productName: '계절 생과일 주스',
-            optionId: 2,
-            optionName: '단일옵션',
-            optionQuantity: 1,
-            optionUnitPrice: 6500
-        }];
+    const selectList = () => {
+        axios.get("/cart/selectList").then(response => {
+            setCart(response.data);
+            calculateAmount(response.data);
+        });
+    }
 
-        setCartItems(data);
-        calculateAmount(data);
+    useEffect(() => {
+        selectList()
     }, []);
 
     return (
@@ -49,8 +41,8 @@ function Cart() {
                     <span></span>
                 </div>
                 {
-                    cartItems.map(ci => {
-                        return (<CartItem cartItem={ci} key={ci.optionId} data-key={ci.optionId}/>)
+                    cart.map(ci => {
+                        return <CartItem cartItem={ci} key={ci.optionId} data-key={ci.optionId}/>
                     })
                 }
                 <div className="cart-total">
@@ -70,17 +62,53 @@ function Cart() {
 }
 
 function CartItem({cartItem}) {
+    const removeCart = (optionId) => {
+        if (window.confirm("상품을 제거하시겠습니까?")) {
+            axios.get('/cart/remove?optionId=' + optionId)
+                .then(response => {
+                    if (response)
+                        alert("상품이 제거되었습니다.");
+                    else
+                        alert("상품이 제거되지 않았습니다.");
+                });
+        }
+    }
+
+    const setQuantity = (change, optionId, optionQuantity) => {
+        let changedValue = change + Number(optionQuantity);
+        if (changedValue <= 0) {
+            return;
+        }
+
+        axios.get('/cart/setQuantity?optionId=' + optionId + '&optionQuantity=' + changedValue)
+            .then(response => {
+                if (response)
+                    window.location.reload();
+            });
+    }
+
     return (
         <div className="cart-figure">
             <span>{cartItem.productName}</span>
             <span>{cartItem.optionName}</span>
             <div className="cart-figure-quantity">
-                <button>-</button>
+                <button onClick={() => {
+                    setQuantity(-1, cartItem.optionId, cartItem.optionQuantity)
+                }}>➖
+                </button>
                 <span>{cartItem.optionQuantity}</span>
-                <button>+</button>
+                <button onClick={() => {
+                    setQuantity(1, cartItem.optionId, cartItem.optionQuantity)
+                }}>➕
+                </button>
             </div>
             <span>{cartItem.optionUnitPrice * cartItem.optionQuantity}</span>
-            <button>제거</button>
+            <button onClick={() => {
+                removeCart(cartItem.optionId);
+                window.location.reload();
+            }
+            }>제거
+            </button>
         </div>
     )
 }

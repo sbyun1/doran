@@ -6,6 +6,16 @@ public class OrderItemDto extends ItemDto {
     private int optionQuantity;
     private int optionPrice;
 
+    private int optionUnitPrice;
+
+    public int getOptionUnitPrice() {
+        return optionUnitPrice;
+    }
+
+    public void setOptionUnitPrice(int optionUnitPrice) {
+        this.optionUnitPrice = optionUnitPrice;
+    }
+
     public int getOptionId() {
         return optionId;
     }

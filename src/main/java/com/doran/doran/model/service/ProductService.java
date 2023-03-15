@@ -87,6 +87,7 @@ public class ProductService {
             dto.setOptionId(productOption.getOptionId());
             dto.setOptionName(productOption.getOptionName());
             dto.setOptionQuantity(1);
+            dto.setOptionUnitPrice(productOption.getOptionPrice());
             dto.setProductId(productOption.getProduct().getProductId());
             dto.setProductName(productOption.getProduct().getProductName());
         }

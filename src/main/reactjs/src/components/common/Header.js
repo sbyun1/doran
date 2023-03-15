@@ -5,7 +5,10 @@ function Header() {
         <div className="common top">
             <div className="common-header">
                 <div className="logo">
-                    <span>Cafe Doran</span>
+                    <span onClick={() => {
+                        window.location.href = '/'
+                    }
+                    }>Cafe Doran</span>
                 </div>
             </div>
             <div className="common-nav">

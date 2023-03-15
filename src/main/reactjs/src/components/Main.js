@@ -132,11 +132,24 @@ function Product({product}) {
 }
 
 function ProductOption({option}) {
+    const addCart = (optionId) => {
+        axios.get('/cart/add?optionId=' + optionId)
+            .then(response => {
+                if (response)
+                    alert("장바구니에 추가되었습니다.");
+                else
+                    alert("장바구니에 추가되지 않았습니다.");
+            });
+    }
+
     return (
         <div>
             <span>{option.optionName}</span>
             <span>{option.optionPrice}</span>
-            <button>+ Cart</button>
+            <button onClick={() => {
+                addCart(option.optionId)
+            }}>+ Cart
+            </button>
         </div>
     )
 }
