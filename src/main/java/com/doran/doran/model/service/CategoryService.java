@@ -2,7 +2,7 @@ package com.doran.doran.model.service;
 
 import com.doran.doran.model.dto.CategoryDto;
 import com.doran.doran.model.entity.Category;
-import com.doran.doran.model.repo.CategoryRepository;
+import com.doran.doran.model.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

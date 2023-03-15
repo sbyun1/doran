@@ -50,6 +50,7 @@ function Main() {
         axios.get('/menu/findByKeyword?keyword=' + keyword)
             .then(response => {
                 setProducts(response.data);
+                initializeSize(response.data.length);
             });
     }
 

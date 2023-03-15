@@ -1,4 +1,4 @@
-package com.doran.doran.model.repo;
+package com.doran.doran.model.repository;
 
 import com.doran.doran.model.entity.Category;
 import org.springframework.data.jpa.repository.JpaRepository;

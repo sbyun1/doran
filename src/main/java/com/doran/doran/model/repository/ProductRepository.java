@@ -1,7 +1,8 @@
-package com.doran.doran.model.repo;
+package com.doran.doran.model.repository;
 
 import com.doran.doran.model.entity.Category;
 import com.doran.doran.model.entity.Product;
+import com.doran.doran.model.entity.ProductOption;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

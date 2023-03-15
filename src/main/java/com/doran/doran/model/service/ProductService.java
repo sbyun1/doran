@@ -1,10 +1,13 @@
 package com.doran.doran.model.service;
 
-import com.doran.doran.model.dto.MenuDto;
+import com.doran.doran.model.dto.MenuItemDto;
+import com.doran.doran.model.dto.OrderItemDto;
 import com.doran.doran.model.entity.Category;
 import com.doran.doran.model.entity.Product;
-import com.doran.doran.model.repo.CategoryRepository;
-import com.doran.doran.model.repo.ProductRepository;
+import com.doran.doran.model.entity.ProductOption;
+import com.doran.doran.model.repository.CategoryRepository;
+import com.doran.doran.model.repository.ProductOptionRepository;
+import com.doran.doran.model.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,11 +21,13 @@ public class ProductService {
     private ProductRepository productRepository;
     @Autowired
     private CategoryRepository categoryRepository;
+    @Autowired
+    private ProductOptionRepository productOptionRepository;
 
-    public List<MenuDto> findAll() {
-        List<MenuDto> list = new ArrayList<MenuDto>();
+    public List<MenuItemDto> findAll() {
+        List<MenuItemDto> res = new ArrayList<MenuItemDto>();
         productRepository.findAll().forEach(p -> {
-            MenuDto dto = new MenuDto();
+            MenuItemDto dto = new MenuItemDto();
 
             // Response로 보내기 적절한 타입으로 Entity를 Dto로 변환
             dto.setCategoryName(p.getCategory().getCategoryName());
@@ -31,16 +36,16 @@ public class ProductService {
             dto.setProductDesc(p.getProductDesc());
             dto.setProductOptions(p.getOptions());
 
-            list.add(dto);
+            res.add(dto);
         });
-        return list;
+        return res;
     }
 
-    public List<MenuDto> findByCategory(Integer categoryId) {
-        List<MenuDto> list = new ArrayList<>();
+    public List<MenuItemDto> findByCategory(Integer categoryId) {
+        List<MenuItemDto> res = new ArrayList<>();
         Optional<Category> category = categoryRepository.findById(categoryId);
         productRepository.findByCategory(category).forEach(p -> {
-            MenuDto dto = new MenuDto();
+            MenuItemDto dto = new MenuItemDto();
 
             // Response로 보내기 적절한 타입으로 Entity를 Dto로 변환
             dto.setCategoryName(p.getCategory().getCategoryName());
@@ -49,15 +54,15 @@ public class ProductService {
             dto.setProductDesc(p.getProductDesc());
             dto.setProductOptions(p.getOptions());
 
-            list.add(dto);
+            res.add(dto);
         });
-        return list;
+        return res;
     }
 
-    public List<MenuDto> findByKeyword(String keyword) {
-        List<MenuDto> list = new ArrayList<>();
+    public List<MenuItemDto> findByKeyword(String keyword) {
+        List<MenuItemDto> res = new ArrayList<>();
         productRepository.findByProductNameContaining(keyword).forEach(p -> {
-            MenuDto dto = new MenuDto();
+            MenuItemDto dto = new MenuItemDto();
 
             // Response로 보내기 적절한 타입으로 Entity를 Dto로 변환
             dto.setCategoryName(p.getCategory().getCategoryName());
@@ -66,10 +71,27 @@ public class ProductService {
             dto.setProductDesc(p.getProductDesc());
             dto.setProductOptions(p.getOptions());
 
-            list.add(dto);
+            res.add(dto);
         });
-        
-        return list;
+
+        return res;
+    }
+
+    public OrderItemDto findByOption(Integer optionId) {
+        Optional<ProductOption> option = productOptionRepository.findById(optionId);
+        OrderItemDto dto = new OrderItemDto();
+
+        if (option.isPresent()) {
+            ProductOption productOption = option.get();
+
+            dto.setOptionId(productOption.getOptionId());
+            dto.setOptionName(productOption.getOptionName());
+            dto.setOptionQuantity(1);
+            dto.setProductId(productOption.getProduct().getProductId());
+            dto.setProductName(productOption.getProduct().getProductName());
+        }
+
+        return dto;
     }
 
     public Optional<Product> findById(Integer productId) {

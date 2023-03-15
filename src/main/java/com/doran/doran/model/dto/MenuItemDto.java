@@ -4,20 +4,10 @@ import com.doran.doran.model.entity.ProductOption;
 
 import java.util.List;
 
-public class MenuDto {
-    private int productId;
+public class MenuItemDto extends ItemDto {
     private String categoryName;
-    private String productName;
     private List<ProductOption> productOptions;
     private String productDesc;
-
-    public int getProductId() {
-        return productId;
-    }
-
-    public void setProductId(int productId) {
-        this.productId = productId;
-    }
 
     public String getCategoryName() {
         return categoryName;
@@ -25,14 +15,6 @@ public class MenuDto {
 
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
-    }
-
-    public String getProductName() {
-        return productName;
-    }
-
-    public void setProductName(String productName) {
-        this.productName = productName;
     }
 
     public List<ProductOption> getProductOptions() {

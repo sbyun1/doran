@@ -1,0 +1,68 @@
+.cart-top > *:first-child,
+.payment-top > *:first-child {
+    font-size: x-large;
+    font-weight: 700;
+    background: linear-gradient(to top, gold 50%, transparent 50%);
+}
+
+.cart-list {
+    width: 1280px;
+    display: grid;
+    background-color: rgba(252, 252, 252);
+}
+
+.cart-list > * {
+    display: grid;
+    grid-template-columns: 30% 30% 15% 20% 5%;
+    text-align: center;
+    font-size: large;
+    padding: 30px;
+}
+
+.cart-figure button {
+    font-size: medium;
+    font-weight: 700;
+    background: none;
+    border: none;
+    transition: 0.1s;
+}
+
+.cart-figure button:hover {
+    transform: scale(1.1);
+    cursor: pointer;
+}
+
+.cart-figure-quantity {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.cart-header,
+.cart-total {
+    font-weight: 700;
+    font-size: larger;
+}
+
+.cart-total > *:nth-child(2) {
+    grid-column-start: 4;
+}
+
+.payment-option {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.payment-option > button {
+    padding: 10px 20px 10px 20px;
+    font-size: large;
+    font-weight: 700;
+    border: none;
+    transition: 0.3s;
+}
+
+.payment-option > button:hover {
+    background-color: gold;
+    color: white;
+    cursor: pointer;
+}
