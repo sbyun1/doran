@@ -1,0 +1,54 @@
+.event-top > *:first-child {
+    font-size: x-large;
+    font-weight: 700;
+    background: linear-gradient(to top, gold 50%, transparent 50%);
+}
+
+.event-list {
+    width: 1280px;
+    display: grid;
+    gap: 10px;
+    justify-items: center;
+    align-items: center;
+    background-color: rgba(252, 252, 252);
+    border-top: solid 3px gold;
+    padding-top: 10px;
+}
+
+.event-figure {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    border-bottom: solid 1px rgba(50, 50, 50, 0.4);
+    align-items: center;
+    transition: 0.3s;
+}
+
+.event-figure:hover {
+    cursor: pointer;
+    transform: scale(1.1);
+    background-color: white;
+}
+
+.event-info {
+    display: grid;
+    gap: 30px;
+}
+
+.event-status {
+    width: 80px;
+    text-align: center;
+    background-color: gold;
+    justify-self: left;
+}
+
+.event-status.end {
+    background-color: gray !important;
+    color: white;
+}
+
+.event-title {
+    font-weight: 700;
+    font-size: large;
+}
