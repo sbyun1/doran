@@ -1,5 +1,6 @@
 .cart-top > *:first-child,
-.payment-top > *:first-child {
+.payment-top > *:first-child,
+.order-top > *:first-child {
     font-size: x-large;
     font-weight: 700;
     background: linear-gradient(to top, gold 50%, transparent 50%);
@@ -47,13 +48,96 @@
     grid-column-start: 4;
 }
 
-.payment-option {
+.order-info {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    background-color: rgba(252, 252, 252);
+}
+
+.order-info > * {
+    display: grid;
+    grid-template-columns: 30% 70%;
+    justify-items: center;
+    align-items: center;
+    gap: 10px;
+    padding: 30px 0 30px 0;
+}
+
+.order-info > * > input, textarea {
+    width: 50%;
+    background: white;
+    border: solid 1px darkgray;
+    text-align: center;
+    padding: 10px;
+}
+
+.order-info-validation {
+    width: 50%;
+    display: grid;
+    grid-template-columns: 80% 20%;
     gap: 10px;
 }
 
-.payment-option > button {
+.order-info-validation input {
+    background: white;
+    border: solid 1px darkgray;
+    text-align: center;
+    padding: 10px;
+}
+
+.order-info-validation > .input-valid {
+    font-size: large;
+}
+
+.order-info-validation > input[type="button"] {
+    background: #282c34;
+    color: #fcfcfc;
+    text-align: center;
+    padding: 10px;
+    transition: 0.3s;
+}
+
+.order-info-validation > input[type="button"].disabled {
+    background-color: darkgray;
+    color: gray;
+}
+
+.order-info-validation > input[type="button"].disabled:hover {
+    background-color: darkgray;
+    color: gray;
+    cursor: not-allowed;
+}
+
+.order-info-validation > input[type="button"]:hover {
+    background-color: gold;
+    cursor: pointer;
+}
+
+.order-info > * > textarea {
+    resize: none;
+}
+
+.order-info > * > *:first-child {
+    font-size: large;
+    font-weight: bold;
+}
+
+.order-info > * > *:nth-child(2) {
+    font-size: large;
+}
+
+.order-info > * > span:last-child {
+    grid-column-start: 2;
+    font-size: small;
+}
+
+.order-confirm {
+    display: grid;
+    gap: 10px;
+    align-items: center;
+}
+
+.order-confirm > button {
     padding: 10px 20px 10px 20px;
     font-size: large;
     font-weight: 700;
@@ -61,7 +145,7 @@
     transition: 0.3s;
 }
 
-.payment-option > button:hover {
+.order-confirm > button:hover {
     background-color: gold;
     color: white;
     cursor: pointer;
