@@ -1,12 +1,11 @@
 import '../resources/css/cart.css'
 import '../resources/css/main.css'
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import axios from "axios";
 
 function Cart() {
     const [cart, setCart] = useState([]);
     const [totalAmount, setTotalAmount] = useState(0);
-    const [verifiedPwd, setVerifiedPwd] = useState(0);
 
     const calculateAmount = (_cart) => {
         let currentAmount = 0;
@@ -31,12 +30,9 @@ function Cart() {
 
     const isEmpty = () => {
         if (cart.length == 0) {
-            return (
-                <div>
-                    <span className="cart-state-empty">장바구니에 상품이 존재하지 않습니다.</span>
-                </div>
-            )
+            return true;
         }
+        return false;
     }
     const setCurrency = (price) => {
         return price.toLocaleString("ko-KR", {maximumFractionDigits: 0});
@@ -56,7 +52,7 @@ function Cart() {
                     <span></span>
                 </div>
                 {
-                    isEmpty()
+                    isEmpty() && <div><span className="cart-state-empty">장바구니에 상품이 존재하지 않습니다.</span></div>
                 }
                 {
                     cart.map(ci => {
@@ -69,28 +65,92 @@ function Cart() {
                     <span>{setCurrency(totalAmount)}</span>
                 </div>
             </div>
+            {
+                !isEmpty() && <Order/>
+            }
+        </div>
+    )
+}
+
+function Order() {
+    const pwdRef = useRef(null);
+    const pwdValidRef = useRef(null);
+    const ordConfirmRef = useRef(null);
+
+    const isSixDigits = (orderPwd) => {
+        return !!orderPwd.match(/^\d{6}$/);
+    }
+
+    function checkPwd() {
+        pwdValidRef.current.value = null;
+
+        if (isSixDigits(pwdRef.current.value)) {
+            pwdValidRef.current.disabled = false;
+            pwdValidRef.current.focus();
+        } else {
+            pwdValidRef.current.disabled = true;
+        }
+    }
+
+    function checkNaN(e) {
+        if (isNaN(e.key) || pwdValidRef.current.value.length > 5) {
+            e.preventDefault();
+        }
+    }
+
+    function checkPwdValid() {
+
+        if (pwdRef.current.value == pwdValidRef.current.value) {
+            ordConfirmRef.current.disabled = false;
+            ordConfirmRef.current.title = '';
+        } else {
+            ordConfirmRef.current.disabled = true;
+            ordConfirmRef.current.title = '비밀번호 확인 후 활성화됩니다.';
+        }
+    }
+
+    return (
+        <>
             <div className="order-top">
                 <span>주문정보</span>
                 <span>* 주문정보는 고객 식별, 구매 및 결제를 위해 사용됩니다.</span>
             </div>
             <div className="order-info">
-                <div>
+                <div>d
                     <span>주문자명</span><input type="text" name="orderName" placeholder="이름"/>
                 </div>
                 <div>
-                    <span>비밀번호</span><input type="password" name="orderPwd" placeholder="비밀번호 숫자 6자리"/>
+                    <span>비밀번호</span><input type="password" name="orderPassword"
+                                            ref={pwdRef}
+                                            onChange={() => {
+                                                checkPwd()
+                                            }}
+                                            onKeyPress={(e) => {
+                                                checkNaN(e.nativeEvent)
+                                            }}
+                                            placeholder="비밀번호 숫자 6자리"/>
                 </div>
                 <div>
-                    <span>비밀번호 확인</span><input type="password" name="orderPwdValid" placeholder="비밀번호 숫자 6자리 확인"/>
+                    <span>비밀번호 확인</span><input type="password" name="orderPasswordConfirm"
+                                               ref={pwdValidRef} disabled
+                                               onChange={() => {
+                                                   checkPwdValid()
+                                               }}
+                                               onKeyPress={(e) => {
+                                                   checkNaN(e.nativeEvent)
+                                               }}
+                                               placeholder="비밀번호 숫자 6자리 확인"/>
                 </div>
                 <div>
                     <span>메모</span><textarea name="orderMemo" placeholder="요청사항 입력"/>
                 </div>
             </div>
             <div className="order-confirm">
-                <button>주문하기</button>
+                <input type="button" className={`order-confirm-button`}
+                       ref={ordConfirmRef} title={"비밀번호 확인 후 활성화됩니다."} disabled value="주문하기">
+                </input>
             </div>
-        </div>
+        </>
     )
 }
 

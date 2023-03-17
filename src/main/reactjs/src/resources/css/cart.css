@@ -20,7 +20,7 @@
     padding: 30px;
 }
 
-.cart-state-empty{
+.cart-state-empty {
     grid-column-start: 1;
     grid-column-end: 5;
 }
@@ -76,46 +76,9 @@
     padding: 10px;
 }
 
-.order-info-validation {
-    width: 50%;
-    display: grid;
-    grid-template-columns: 80% 20%;
-    gap: 10px;
-}
-
-.order-info-validation input {
-    background: white;
-    border: solid 1px darkgray;
-    text-align: center;
-    padding: 10px;
-}
-
-.order-info-validation > .input-valid {
-    font-size: large;
-}
-
-.order-info-validation > input[type="button"] {
-    background: #282c34;
-    color: #fcfcfc;
-    text-align: center;
-    padding: 10px;
-    transition: 0.3s;
-}
-
-.order-info-validation > input[type="button"].disabled {
-    background-color: darkgray;
-    color: gray;
-}
-
-.order-info-validation > input[type="button"].disabled:hover {
-    background-color: darkgray;
-    color: gray;
-    cursor: not-allowed;
-}
-
-.order-info-validation > input[type="button"]:hover {
-    background-color: gold;
-    cursor: pointer;
+.order-info > * > input[type=password]:disabled {
+    color: white;
+    background-color: gainsboro;
 }
 
 .order-info > * > textarea {
@@ -142,7 +105,7 @@
     align-items: center;
 }
 
-.order-confirm > button {
+.order-confirm-button {
     padding: 10px 20px 10px 20px;
     font-size: large;
     font-weight: 700;
@@ -150,7 +113,7 @@
     transition: 0.3s;
 }
 
-.order-confirm > button:hover {
+.order-confirm-button:enabled:hover {
     background-color: gold;
     color: white;
     cursor: pointer;

@@ -150,14 +150,16 @@ function Product({product}) {
         return optionLength === 1;
     }
 
-    const showItemDetails = (event) => {
-        console.log(event)
+    const showItemDetails = (productId) => {
+        console.log(productId)
     }
 
     return (
         <div className="product-figure">
             <div className="item-info">
-                <div className="item-info-product">
+                <div className="item-info-product" onClick={() => {
+                    showItemDetails(product.productId)
+                }}>
                     <span>{product.categoryName}</span>
                     <span className="item-name">{product.productName}</span>
                 </div>
@@ -170,7 +172,7 @@ function Product({product}) {
                     }
                 </div>
             </div>
-            <div className="item-details">
+            <div className="item-details" id={product.productId}>
                 <span>{product.productName}</span>
                 <span>{product.productDesc}</span>
                 <span className="close"></span>
