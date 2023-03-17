@@ -99,7 +99,6 @@ function Order() {
     }
 
     function checkPwdValid() {
-
         if (pwdRef.current.value == pwdValidRef.current.value) {
             ordConfirmRef.current.disabled = false;
             ordConfirmRef.current.title = '';
@@ -116,7 +115,7 @@ function Order() {
                 <span>* 주문정보는 고객 식별, 구매 및 결제를 위해 사용됩니다.</span>
             </div>
             <div className="order-info">
-                <div>d
+                <div>
                     <span>주문자명</span><input type="text" name="orderName" placeholder="이름"/>
                 </div>
                 <div>
