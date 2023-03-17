@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import '../resources/css/main.css';
 import axios from "axios";
 
@@ -146,19 +146,20 @@ function Search({field, method}) {
 }
 
 function Product({product}) {
+    const detailRef = useRef(null);
     const isSingle = (optionLength) => {
         return optionLength === 1;
     }
 
-    const showItemDetails = (productId) => {
-        console.log(productId)
+    const handleDetails = () => {
+        detailRef.current.classList.toggle('shown');
     }
 
     return (
         <div className="product-figure">
             <div className="item-info">
                 <div className="item-info-product" onClick={() => {
-                    showItemDetails(product.productId)
+                    handleDetails(product.productId)
                 }}>
                     <span>{product.categoryName}</span>
                     <span className="item-name">{product.productName}</span>
@@ -172,10 +173,12 @@ function Product({product}) {
                     }
                 </div>
             </div>
-            <div className="item-details" id={product.productId}>
+            <div className="item-details" id={product.productId} ref={detailRef}>
                 <span>{product.productName}</span>
                 <span>{product.productDesc}</span>
-                <span className="close"></span>
+                <span className="close" onClick={() => {
+                    handleDetails(product.productId)
+                }}></span>
             </div>
         </div>
     )
