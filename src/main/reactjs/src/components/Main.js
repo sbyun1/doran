@@ -46,7 +46,11 @@ function Main() {
 
     // props:category
     const _category = {
-        field: {currentCategory: currentCategory, category: category},
+        field: (category) => {
+            return {
+                currentCategory: currentCategory, category: category
+            }
+        },
         method: {
             setCurrentCategory: setCurrentCategory,
             setProducts: setProducts,
@@ -68,15 +72,11 @@ function Main() {
     return (
         <div className="main-container">
             <div className="product-category">
-                <Category method={{
-                    setCurrentCategory: setCurrentCategory,
-                    setProducts: setProducts,
-                    initializeSize: initializeSize
-                }} field={{currentCategory: currentCategory, category: _category_all}}/>
+                <Category method={_category.method} field={_category.field(_category_all)}/>
                 {
                     categories.map(category => {
                         return <Category key={category.categoryId} data-key={category.categoryId}
-                                         method={_category.method} field={_category.field}/>
+                                         method={_category.method} field={_category.field(category)}/>
                     })
                 }
             </div>
