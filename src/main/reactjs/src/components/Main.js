@@ -4,11 +4,13 @@ import axios from "axios";
 
 function Main() {
     const [products, setProducts] = useState([]);
-    const [categories, setCategroies] = useState([]);
+    const [categories, setCategories] = useState([]);
     const [keyword, setKeyword] = useState('');
     const [currentCategory, setCurrentCategory] = useState(0);
     const [maxSize, setMaxSize] = useState(0);
     const [currentSize, setCurrentSize] = useState(0);
+
+    const searchRef = useRef();
 
     const initializeSize = (size) => {
         setMaxSize(size);
@@ -21,7 +23,7 @@ function Main() {
     useEffect(() => {
         axios.get('/menu/init')
             .then(response => {
-                setCategroies(response.data.categories);
+                setCategories(response.data.categories);
                 setProducts(response.data.products);
                 initializeSize(response.data.products.length);
             });
@@ -48,7 +50,7 @@ function Main() {
     const _category = {
         field: (category) => {
             return {
-                currentCategory: currentCategory, category: category
+                currentCategory: currentCategory, category: category, searchRef: searchRef
             }
         },
         method: {
@@ -60,13 +62,20 @@ function Main() {
 
     // props:search
     const _search = {
-        field: {keyword: keyword, currentCategory: currentCategory},
+        field: {keyword: keyword, currentCategory: currentCategory, searchRef: searchRef},
         method: {
             setKeyword: setKeyword,
             setProducts: setProducts,
             setCurrentCategory: setCurrentCategory,
             initializeSize: initializeSize
         }
+    }
+
+    const isEmptyList = () => {
+        if (products.length == 0) {
+            return true;
+        }
+        return false;
     }
 
     return (
@@ -85,10 +94,17 @@ function Main() {
             </div>
             <div className="product-list">
                 {
-                    Array.from(products.slice(0, currentSize)).map(product => {
-                        return <Product key={product.productId} data-key={product.productId}
-                                        product={product}></Product>
-                    })
+                    isEmptyList() ? (
+                        <div className="empty-result">
+                            <span>조회된 결과가 없습니다.</span>
+                            <span>카테고리 및 검색어를 확인하신 후 다시 조회하세요.</span>
+                        </div>
+                    ) : (
+                        Array.from(products.slice(0, currentSize)).map(product => {
+                            return <Product key={product.productId} data-key={product.productId}
+                                            product={product}></Product>
+                        })
+                    )
                 }
                 <div className={`product-list-end ${isEndpoint() ? "hidden" : null}`}>
                     <button onClick={clickMore}>더 보기</button>
@@ -104,6 +120,8 @@ function Category({method, field}) {
         return field.currentCategory == categoryId;
     }
     const clickCategory = (event) => {
+        field.searchRef.current.value = '';
+
         const categoryId = event.target.getAttribute('data-key');
         method.setCurrentCategory(categoryId);
 
@@ -122,6 +140,7 @@ function Category({method, field}) {
 
 function Search({field, method}) {
     const keyword = field.keyword;
+    const searchRef = field.searchRef;
     const currentCategory = field.currentCategory;
     const findByKeyword = () => {
         axios.get('/menu/findByKeyword?keyword=' + keyword + '&categoryId=' + currentCategory)
@@ -139,8 +158,8 @@ function Search({field, method}) {
                 if (e.key === 'Enter') {
                     findByKeyword();
                 }
-            }
-            }/><input type="button" value="검색" onClick={findByKeyword}/>
+            }} ref={searchRef}/>
+            <input type="button" value="검색" onClick={findByKeyword}/>
         </>
     )
 }
