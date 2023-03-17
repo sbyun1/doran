@@ -56,7 +56,8 @@ function Cart() {
                 }
                 {
                     cart.map(ci => {
-                        return <CartItem method={{setCurrency: setCurrency}} field={{cartItem: ci}} key={ci.optionId}
+                        return <CartItem method={{setCurrency: setCurrency}}
+                                         field={{cartItem: ci, totalAmount}} key={ci.optionId}
                                          data-key={ci.optionId}/>
                     })
                 }
@@ -164,20 +165,28 @@ function CartItem({method, field}) {
                     else
                         alert("상품이 제거되지 않았습니다.");
                 });
+        } else {
+            return;
         }
     }
 
-    const setQuantity = (change, optionId, optionQuantity) => {
-        let changedValue = change + Number(optionQuantity);
+    const quanRef = useRef()
+    const priceRef = useRef()
+
+    const setQuantity = (change, cartItem) => {
+        const optionId = cartItem.optionId;
+        const optionQuantity = cartItem.optionQuantity;
+
+        const changedValue = change + Number(optionQuantity);
         if (changedValue <= 0) {
-            return;
+            return
         }
 
         axios.get('/cart/setQuantity?optionId=' + optionId + '&optionQuantity=' + changedValue)
             .then(response => {
-                if (response)
-                    window.location.reload();
-            });
+                if (response.data)
+                    window.location.reload()
+            })
     }
 
     return (
@@ -185,17 +194,15 @@ function CartItem({method, field}) {
             <span>{cartItem.productName}</span>
             <span>{cartItem.optionName}</span>
             <div className="cart-figure-quantity">
-                <button onClick={() => {
-                    setQuantity(-1, cartItem.optionId, cartItem.optionQuantity)
-                }}>➖
-                </button>
-                <span>{cartItem.optionQuantity}</span>
-                <button onClick={() => {
-                    setQuantity(1, cartItem.optionId, cartItem.optionQuantity)
-                }}>➕
-                </button>
+                <div className="adjust-quantity plus" onClick={() => {
+                    setQuantity(-1, cartItem)
+                }}/>
+                <span ref={quanRef}>{cartItem.optionQuantity}</span>
+                <div className="adjust-quantity minus" onClick={() => {
+                    setQuantity(1, cartItem)
+                }}/>
             </div>
-            <span>{method.setCurrency(cartItem.optionUnitPrice * cartItem.optionQuantity)}</span>
+            <span ref={priceRef}>{method.setCurrency(cartItem.optionUnitPrice * cartItem.optionQuantity)}</span>
             <button onClick={() => {
                 removeCart(cartItem.optionId);
                 window.location.reload();

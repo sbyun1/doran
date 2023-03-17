@@ -34,7 +34,6 @@
 }
 
 .cart-figure button:hover {
-    transform: scale(1.1);
     cursor: pointer;
 }
 
@@ -117,4 +116,26 @@
     background-color: gold;
     color: white;
     cursor: pointer;
+}
+
+.adjust-quantity {
+    padding: 5px 10px 5px 10px;
+    justify-self: center;
+    background-color: white;
+    border: solid 1px gray;
+    transition: 0.3s;
+}
+
+.adjust-quantity:hover {
+    background-color: gold;
+}
+
+.adjust-quantity.plus:after {
+    content: '\2212';
+    font-size: large;
+}
+
+.adjust-quantity.minus:after {
+    content: '\002B';
+    font-size: large;
 }
