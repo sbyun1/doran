@@ -59,9 +59,19 @@ public class ProductService {
         return res;
     }
 
-    public List<MenuItemDto> findByKeyword(String keyword) {
+    public List<MenuItemDto> findByKeyword(Integer categoryId, String keyword) {
         List<MenuItemDto> res = new ArrayList<>();
-        productRepository.findByProductNameContaining(keyword).forEach(p -> {
+        List<Product> products = new ArrayList<>();
+        Optional<Category> category = categoryRepository.findById(categoryId);
+
+        if (categoryId == 0) {
+            // 카테고리 전체로 선택한 경우
+            products = productRepository.findByProductNameContaining(keyword);
+        } else {
+            products = productRepository.findByCategoryAndProductNameContaining(category.get(), keyword);
+        }
+
+        products.forEach(p -> {
             MenuItemDto dto = new MenuItemDto();
 
             // Response로 보내기 적절한 타입으로 Entity를 Dto로 변환

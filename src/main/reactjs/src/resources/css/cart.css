@@ -20,6 +20,11 @@
     padding: 30px;
 }
 
+.cart-state-empty{
+    grid-column-start: 1;
+    grid-column-end: 5;
+}
+
 .cart-figure button {
     font-size: medium;
     font-weight: 700;

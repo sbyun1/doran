@@ -6,7 +6,6 @@ import axios from "axios";
 function Cart() {
     const [cart, setCart] = useState([]);
     const [totalAmount, setTotalAmount] = useState(0);
-    const [verifiedTel, setVerifiedTel] = useState(0);
     const [verifiedPwd, setVerifiedPwd] = useState(0);
 
     const calculateAmount = (_cart) => {
@@ -30,6 +29,19 @@ function Cart() {
         selectList()
     }, []);
 
+    const isEmpty = () => {
+        if (cart.length == 0) {
+            return (
+                <div>
+                    <span className="cart-state-empty">장바구니에 상품이 존재하지 않습니다.</span>
+                </div>
+            )
+        }
+    }
+    const setCurrency = (price) => {
+        return price.toLocaleString("ko-KR", {maximumFractionDigits: 0});
+    }
+
     return (
         <div className="main-container">
             <div className="cart-top">
@@ -44,13 +56,17 @@ function Cart() {
                     <span></span>
                 </div>
                 {
+                    isEmpty()
+                }
+                {
                     cart.map(ci => {
-                        return <CartItem cartItem={ci} key={ci.optionId} data-key={ci.optionId}/>
+                        return <CartItem method={{setCurrency: setCurrency}} field={{cartItem: ci}} key={ci.optionId}
+                                         data-key={ci.optionId}/>
                     })
                 }
                 <div className="cart-total">
                     <span>총 금액</span>
-                    <span>{totalAmount}</span>
+                    <span>{setCurrency(totalAmount)}</span>
                 </div>
             </div>
             <div className="order-top">
@@ -61,37 +77,6 @@ function Cart() {
                 <div>
                     <span>주문자명</span><input type="text" name="orderName" placeholder="이름"/>
                 </div>
-                {/*결제가 완료됐을 때 입력받는 것으로 변경*/}
-                {/*<div>*/}
-                {/*    <span>연락처</span>*/}
-                {/*    <div className="order-info-validation">*/}
-                {/*        <input type="tel" className="input-valid" name="orderTel" onChange={*/}
-                {/*            (event) => {*/}
-                {/*                const data = event.target.value;*/}
-                {/*                if (data.match(/^[010]{3}[0-9]{4}[0-9]{4}$/) == null) {*/}
-                {/*                    /*}
-                {/*                    * 0 : 입력 없음*/}
-                {/*                    * 1 : 입력 올바름*/}
-                {/*                    * 2 : 입력 틀림*/}
-                {/*                    */}
-                {/*                    setVerifiedTel(2);*/}
-                {/*                } else {*/}
-                {/*                    setVerifiedTel(1);*/}
-                {/*                }*/}
-                {/*            }*/}
-                {/*        }/>*/}
-                {/*        <input type="button" className="disabled" value="인증요청"/>*/}
-                {/*    </div>*/}
-                {/*    <span>* 주문처리 상태가 카카오톡을 통해 전송되니 정확한 정보를 기입해주세요.</span>*/}
-                {/*</div>*/}
-                {/*<div>*/}
-
-                {/*    <span>인증번호</span>*/}
-                {/*    <div className="order-info-validation">*/}
-                {/*        <input type="number" className="input-valid" name="orderTelValid"/>*/}
-                {/*        <input type="button" className="disabled" value="인증"/>*/}
-                {/*    </div>*/}
-                {/*</div>*/}
                 <div>
                     <span>비밀번호</span><input type="password" name="orderPwd" placeholder="비밀번호 숫자 6자리"/>
                 </div>
@@ -109,7 +94,8 @@ function Cart() {
     )
 }
 
-function CartItem({cartItem}) {
+function CartItem({method, field}) {
+    const cartItem = field.cartItem;
     const removeCart = (optionId) => {
         if (window.confirm("상품을 제거하시겠습니까?")) {
             axios.get('/cart/remove?optionId=' + optionId)
@@ -150,7 +136,7 @@ function CartItem({cartItem}) {
                 }}>➕
                 </button>
             </div>
-            <span>{cartItem.optionUnitPrice * cartItem.optionQuantity}</span>
+            <span>{method.setCurrency(cartItem.optionUnitPrice * cartItem.optionQuantity)}</span>
             <button onClick={() => {
                 removeCart(cartItem.optionId);
                 window.location.reload();

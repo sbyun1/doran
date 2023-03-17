@@ -27,25 +27,11 @@ function Main() {
             });
     }, []);
 
-    const isSelected = (categoryId) => {
-        return currentCategory == categoryId;
-    }
     const isEndpoint = () => {
         return currentSize >= maxSize;
     }
 
-    const clickCategory = (event) => {
-        const categoryId = event.target.getAttribute('data-key');
-        setCurrentCategory(categoryId);
-
-        axios.get('/menu/findByCategory?categoryId=' + categoryId)
-            .then(response => {
-                setProducts(response.data);
-                initializeSize(response.data.length);
-            });
-    }
-
-    const clickMoreButton = (event) => {
+    const clickMore = (event) => {
         if (currentSize + 16 < maxSize) {
             setCurrentSize(currentSize + 16);
         } else {
@@ -53,40 +39,49 @@ function Main() {
         }
     }
 
-    const findByKeyword = () => {
-        axios.get('/menu/findByKeyword?keyword=' + keyword)
-            .then(response => {
-                setProducts(response.data);
-                initializeSize(response.data.length);
-            });
+    const _category_all = {
+        categoryId: 0,
+        categoryName: '전체'
+    }
+
+    // props:category
+    const _category = {
+        field: {currentCategory: currentCategory, category: category},
+        method: {
+            setCurrentCategory: setCurrentCategory,
+            setProducts: setProducts,
+            initializeSize: initializeSize
+        }
+    }
+
+    // props:search
+    const _search = {
+        field: {keyword: keyword, currentCategory: currentCategory},
+        method: {
+            setKeyword: setKeyword,
+            setProducts: setProducts,
+            setCurrentCategory: setCurrentCategory,
+            initializeSize: initializeSize
+        }
     }
 
     return (
         <div className="main-container">
             <div className="product-category">
-                <span className={isSelected(0) ? "option-selected" : null}
-                      data-key="0"
-                      onClick={clickCategory}>전체</span>
+                <Category method={{
+                    setCurrentCategory: setCurrentCategory,
+                    setProducts: setProducts,
+                    initializeSize: initializeSize
+                }} field={{currentCategory: currentCategory, category: _category_all}}/>
                 {
                     categories.map(category => {
-                        return <span className={isSelected(category.categoryId) ? "option-selected" : null}
-                                     key={category.categoryId}
-                                     data-key={category.categoryId}
-                                     onClick={clickCategory}>{category.categoryName}</span>
+                        return <Category key={category.categoryId} data-key={category.categoryId}
+                                         method={_category.method} field={_category.field}/>
                     })
                 }
             </div>
             <div className="product-search">
-                <input type="text" name="keyword" onChange={e => {
-                    setKeyword(e.target.value);
-                }
-                } onKeyPress={(e) => {
-                    if (e.key === 'Enter') {
-                        findByKeyword();
-                    }
-                }
-                }/>
-                <input type="button" value="검색" onClick={findByKeyword}/>
+                <Search method={_search.method} field={_search.field}></Search>
             </div>
             <div className="product-list">
                 {
@@ -96,10 +91,57 @@ function Main() {
                     })
                 }
                 <div className={`product-list-end ${isEndpoint() ? "hidden" : null}`}>
-                    <button onClick={clickMoreButton}>더 보기</button>
+                    <button onClick={clickMore}>더 보기</button>
                 </div>
             </div>
         </div>
+    )
+}
+
+function Category({method, field}) {
+    const category = field.category;
+    const isSelected = (categoryId) => {
+        return field.currentCategory == categoryId;
+    }
+    const clickCategory = (event) => {
+        const categoryId = event.target.getAttribute('data-key');
+        method.setCurrentCategory(categoryId);
+
+        axios.get('/menu/findByCategory?categoryId=' + categoryId)
+            .then(response => {
+                method.setProducts(response.data);
+                method.initializeSize(response.data.length);
+            });
+    }
+
+    return <span className={isSelected(category.categoryId) ? "option-selected" : null}
+                 key={category.categoryId}
+                 data-key={category.categoryId}
+                 onClick={clickCategory}>{category.categoryName}</span>
+}
+
+function Search({field, method}) {
+    const keyword = field.keyword;
+    const currentCategory = field.currentCategory;
+    const findByKeyword = () => {
+        axios.get('/menu/findByKeyword?keyword=' + keyword + '&categoryId=' + currentCategory)
+            .then(response => {
+                method.setProducts(response.data);
+                method.initializeSize(response.data.length);
+            });
+    }
+
+    return (
+        <>
+            <input type="text" name="keyword" onChange={e => {
+                method.setKeyword(e.target.value);
+            }} onKeyPress={e => {
+                if (e.key === 'Enter') {
+                    findByKeyword();
+                }
+            }
+            }/><input type="button" value="검색" onClick={findByKeyword}/>
+        </>
     )
 }
 
@@ -138,6 +180,10 @@ function Product({product}) {
 }
 
 function ProductOption({option}) {
+    const setCurrency = (price) => {
+        return price.toLocaleString("ko-KR", {maximumFractionDigits: 0});
+    }
+
     const addCart = (optionId) => {
         axios.get('/cart/add?optionId=' + optionId)
             .then(response => {
@@ -151,7 +197,7 @@ function ProductOption({option}) {
     return (
         <div>
             <span>{option.optionName}</span>
-            <span>{option.optionPrice}</span>
+            <span>{setCurrency(option.optionPrice)}</span>
             <button onClick={() => {
                 addCart(option.optionId)
             }}>+ Cart

@@ -58,8 +58,8 @@ public class MainController {
     }
 
     @GetMapping("/findByKeyword")
-    public ResponseEntity findByKeyword(@RequestParam String keyword) {
-        List<MenuItemDto> res = productService.findByKeyword(keyword);
+    public ResponseEntity findByKeyword(@RequestParam Integer categoryId, @RequestParam String keyword) {
+        List<MenuItemDto> res = productService.findByKeyword(categoryId, keyword);
 
         return new ResponseEntity(res, HttpStatus.OK);
 
