@@ -2,6 +2,7 @@ package com.doran.doran.controller;
 
 import com.doran.doran.model.dto.CategoryDto;
 import com.doran.doran.model.dto.MenuItemDto;
+import com.doran.doran.model.dto.OrderItemDto;
 import com.doran.doran.model.service.CategoryService;
 import com.doran.doran.model.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +28,12 @@ public class MainController {
     CategoryService categoryService;
 
     @GetMapping("/init")
-    public ResponseEntity find() {
+    public ResponseEntity find(HttpSession session) {
+        if (session.getAttribute("cart") == null) {
+            List<OrderItemDto> newCart = new ArrayList<>();
+            session.setAttribute("cart", newCart);
+        }
+
         Map<String, Object> res = new HashMap<>();
 
         List<MenuItemDto> products = productService.findAll();

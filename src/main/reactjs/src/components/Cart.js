@@ -61,41 +61,42 @@ function Cart() {
                 <div>
                     <span>주문자명</span><input type="text" name="orderName" placeholder="이름"/>
                 </div>
-                <div>
-                    <span>연락처</span>
-                    <div className="order-info-validation">
-                        <input type="tel" className="input-valid" name="orderTel" onChange={
-                            (event) => {
-                                const data = event.target.value;
-                                if (data.match(/^[010]{3}[0-9]{4}[0-9]{4}$/) == null) {
-                                    /*
-                                    * 0 : 입력 없음
-                                    * 1 : 입력 올바름
-                                    * 2 : 입력 틀림
-                                    */
-                                    setVerifiedTel(2);
-                                } else {
-                                    setVerifiedTel(1);
-                                }
-                            }
-                        }/>
-                        <input type="button" className="disabled" value="인증요청"/>
-                    </div>
-                    <span>* 주문처리 상태가 카카오톡을 통해 전송되니 정확한 정보를 기입해주세요.</span>
-                </div>
-                <div>
+                {/*결제가 완료됐을 때 입력받는 것으로 변경*/}
+                {/*<div>*/}
+                {/*    <span>연락처</span>*/}
+                {/*    <div className="order-info-validation">*/}
+                {/*        <input type="tel" className="input-valid" name="orderTel" onChange={*/}
+                {/*            (event) => {*/}
+                {/*                const data = event.target.value;*/}
+                {/*                if (data.match(/^[010]{3}[0-9]{4}[0-9]{4}$/) == null) {*/}
+                {/*                    /*}
+                {/*                    * 0 : 입력 없음*/}
+                {/*                    * 1 : 입력 올바름*/}
+                {/*                    * 2 : 입력 틀림*/}
+                {/*                    */}
+                {/*                    setVerifiedTel(2);*/}
+                {/*                } else {*/}
+                {/*                    setVerifiedTel(1);*/}
+                {/*                }*/}
+                {/*            }*/}
+                {/*        }/>*/}
+                {/*        <input type="button" className="disabled" value="인증요청"/>*/}
+                {/*    </div>*/}
+                {/*    <span>* 주문처리 상태가 카카오톡을 통해 전송되니 정확한 정보를 기입해주세요.</span>*/}
+                {/*</div>*/}
+                {/*<div>*/}
 
-                    <span>인증번호</span>
-                    <div className="order-info-validation">
-                        <input type="number" className="input-valid" name="orderTelValid"/>
-                        <input type="button" className="disabled" value="인증"/>
-                    </div>
+                {/*    <span>인증번호</span>*/}
+                {/*    <div className="order-info-validation">*/}
+                {/*        <input type="number" className="input-valid" name="orderTelValid"/>*/}
+                {/*        <input type="button" className="disabled" value="인증"/>*/}
+                {/*    </div>*/}
+                {/*</div>*/}
+                <div>
+                    <span>비밀번호</span><input type="password" name="orderPwd" placeholder="비밀번호 숫자 6자리"/>
                 </div>
                 <div>
-                    <span>비밀번호</span><input type="password" name="orderPwd" placeholder="비밀번호 숫자 4자리"/>
-                </div>
-                <div>
-                    <span>비밀번호</span><input type="password" name="orderPwdValid" placeholder="비밀번호 숫자 4자리 확인"/>
+                    <span>비밀번호 확인</span><input type="password" name="orderPwdValid" placeholder="비밀번호 숫자 6자리 확인"/>
                 </div>
                 <div>
                     <span>메모</span><textarea name="orderMemo" placeholder="요청사항 입력"/>

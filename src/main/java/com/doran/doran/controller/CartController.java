@@ -30,23 +30,20 @@ public class CartController {
         try {
             List<OrderItemDto> cart = (List<OrderItemDto>) session.getAttribute("cart");
             OrderItemDto item = productService.findByOption(optionId);
+            int index = cart.size();
 
-            if (cart == null) {
-                List<OrderItemDto> newCart = new ArrayList<>();
-                newCart.add(item);
-                cart = newCart;
-            } else {
-                for (int i = 0; i < cart.size(); i++) {
-                    if (cart.get(i).getOptionId() == item.getOptionId()) {
-                        item.setOptionQuantity(cart.remove(i).getOptionQuantity() + 1);
-                        break;
-                    }
+            for (int i = 0; i < cart.size(); i++) {
+                if (cart.get(i).getOptionId() == item.getOptionId()) {
+                    item.setOptionQuantity(cart.remove(i).getOptionQuantity() + 1);
+                    index = i;
+                    break;
                 }
-                cart.add(item);
             }
+            cart.add(index, item);
 
             session.setAttribute("cart", cart);
-        } catch (Exception e) {
+        } catch (
+                Exception e) {
             e.printStackTrace();
             flag = false;
         }
@@ -60,16 +57,14 @@ public class CartController {
 
         try {
             List<OrderItemDto> cart = (List<OrderItemDto>) session.getAttribute("cart");
-            OrderItemDto item = productService.findByOption(optionId);
 
-            if (cart == null) {
-                flag = false;
-            } else {
-                for (int i = 0; i < cart.size(); i++) {
-                    if (cart.get(i).getOptionId() == item.getOptionId()) {
-                        cart.remove(i);
-                        break;
-                    }
+            for (int i = 0; i < cart.size(); i++) {
+                if (cart.get(i).getOptionId() == optionId) {
+                    cart.remove(i);
+                    flag = true;
+                    break;
+                } else {
+                    flag = false;
                 }
             }
 
@@ -88,18 +83,16 @@ public class CartController {
 
         try {
             List<OrderItemDto> cart = (List<OrderItemDto>) session.getAttribute("cart");
-            OrderItemDto item = productService.findByOption(optionId);
 
-            if (cart == null) {
-                flag = false;
-            } else {
-                for (int i = 0; i < cart.size(); i++) {
-                    if (cart.get(i).getOptionId() == item.getOptionId()) {
-                        OrderItemDto dto = cart.remove(i);
-                        dto.setOptionQuantity(optionQuantity);
-                        cart.add(i, dto);
-                        break;
-                    }
+            for (int i = 0; i < cart.size(); i++) {
+                if (cart.get(i).getOptionId() == optionId) {
+                    OrderItemDto dto = cart.remove(i);
+                    dto.setOptionQuantity(optionQuantity);
+                    cart.add(i, dto);
+                    flag = true;
+                    break;
+                } else {
+                    flag = false;
                 }
             }
 
