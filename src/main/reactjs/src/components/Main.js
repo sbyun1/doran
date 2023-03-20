@@ -29,6 +29,14 @@ function Main() {
             });
     }, []);
 
+    useEffect(() => {
+        axios.get('/menu/findByCategory?categoryId=' + currentCategory)
+            .then(response => {
+                setProducts(response.data);
+                initializeSize(response.data.length);
+            });
+    }, [currentCategory]);
+
     const isEndpoint = () => {
         return currentSize >= maxSize;
     }
@@ -124,12 +132,6 @@ function Category({method, field}) {
 
         const categoryId = event.target.getAttribute('data-key');
         method.setCurrentCategory(categoryId);
-
-        axios.get('/menu/findByCategory?categoryId=' + categoryId)
-            .then(response => {
-                method.setProducts(response.data);
-                method.initializeSize(response.data.length);
-            });
     }
 
     return <span className={isSelected(category.categoryId) ? "option-selected" : null}

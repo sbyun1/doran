@@ -25,7 +25,7 @@ function Cart() {
     }
 
     useEffect(() => {
-        selectList()
+        selectList();
     }, []);
 
     const isEmpty = () => {
@@ -80,6 +80,10 @@ function Order() {
     const pwdValidRef = useRef(null);
     const memoRef = useRef(null);
     const ordConfirmRef = useRef(null);
+
+    useEffect(() => {
+        ordConfirmRef.current.disabled = true;
+    }, [])
 
     const isSixDigits = (orderPwd) => {
         return !!orderPwd.match(/^\d{6}$/);

@@ -52,11 +52,8 @@ public class OrderController {
                 order.addOrderItems(orderItem);
             });
 
-            orderService.save(order);
-
-            cart = new ArrayList<>();
-            session.setAttribute("cart", cart);
-            session.setAttribute("orderSeq", 0);
+            Order orderConfirm = orderService.save(order);
+            session.setAttribute("order", orderConfirm);
         } catch (Exception e) {
             e.printStackTrace();
             return false;
