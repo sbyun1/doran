@@ -8,6 +8,16 @@ public class OrderItemDto extends ItemDto {
 
     private int optionUnitPrice;
 
+    private int shotQuantity;
+
+    public int getShotQuantity() {
+        return shotQuantity;
+    }
+
+    public void setShotQuantity(int shotQuantity) {
+        this.shotQuantity = shotQuantity;
+    }
+
     public int getOptionUnitPrice() {
         return optionUnitPrice;
     }

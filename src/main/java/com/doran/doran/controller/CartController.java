@@ -3,13 +3,11 @@ package com.doran.doran.controller;
 import com.doran.doran.model.dto.OrderItemDto;
 import com.doran.doran.model.service.ProductService;
 import org.aspectj.weaver.ast.Or;
+import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
@@ -23,18 +21,22 @@ public class CartController {
     @Autowired
     ProductService productService;
 
-    @GetMapping("/add")
-    public boolean addItem(@RequestParam("optionId") Integer optionId, HttpSession session) {
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    public boolean addItem(@RequestBody OrderItemDto newItem, HttpSession session) {
         boolean flag = true;
 
         try {
             List<OrderItemDto> cart = (List<OrderItemDto>) session.getAttribute("cart");
-            OrderItemDto item = productService.findByOption(optionId);
+            OrderItemDto item = productService.findByOption(newItem.getOptionId());
+            item.setOptionQuantity(newItem.getOptionQuantity());
+            item.setShotQuantity(newItem.getShotQuantity());
             int index = cart.size();
 
             for (int i = 0; i < cart.size(); i++) {
-                if (cart.get(i).getOptionId() == item.getOptionId()) {
-                    item.setOptionQuantity(cart.remove(i).getOptionQuantity() + 1);
+                OrderItemDto currentItem = cart.get(i);
+                if (currentItem.getOptionId() == item.getOptionId() && currentItem.getShotQuantity() == item.getShotQuantity()) {
+                    OrderItemDto oldItem = cart.remove(i);
+                    item.setOptionQuantity(oldItem.getOptionQuantity() + newItem.getOptionQuantity());
                     index = i;
                     break;
                 }
@@ -107,6 +109,11 @@ public class CartController {
 
     @GetMapping("/selectList")
     public ResponseEntity<List<OrderItemDto>> showList(HttpSession session) {
-        return new ResponseEntity(session.getAttribute("cart"), HttpStatus.OK);
+        List<OrderItemDto> cart = (List<OrderItemDto>) session.getAttribute("cart");
+        if (cart == null) {
+            cart = new ArrayList<>();
+            session.setAttribute("cart", cart);
+        }
+        return new ResponseEntity(cart, HttpStatus.OK);
     }
 }

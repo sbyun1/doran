@@ -166,8 +166,59 @@ function Search({field, method}) {
 
 function Product({product}) {
     const detailRef = useRef(null);
+    const orderRef = useRef(null);
+    const [orderQuantity, setOrderQuanity] = useState(0);
+    const [shotQuantity, setShotQuantity] = useState(0);
+    const [orderOption, setOrderOption] = useState(null);
+
     const isSingle = (optionLength) => {
         return optionLength === 1;
+    }
+
+    const isNotNull = () => {
+        return orderOption != null;
+
+    }
+
+    const isCoffee = (categoryName) => {
+        return categoryName === '커피';
+
+    }
+
+    const adjustQuantity = (change) => {
+        setOrderQuanity(orderQuantity + change);
+    }
+
+    const adjustShotQuantity = (change) => {
+        setShotQuantity(shotQuantity + change);
+    }
+
+    const addCart = (option) => {
+        setOrderOption(option);
+        setOrderQuanity(1);
+        orderRef.current.classList.toggle("shown");
+    }
+
+    const confirmCart = (confirmFlag) => {
+        if (confirmFlag) {
+            const item = {
+                optionId: orderOption.optionId,
+                optionQuantity: orderQuantity,
+                shotQuantity: shotQuantity
+            };
+
+            axios.post('/cart/add', item).then(response => {
+                if (response.data) {
+                    if (window.confirm('장바구니에 추가되었습니다. 장바구니로 이동하시겠습니까?'))
+                        window.location.href = '/cart';
+                    else
+                        alert('장바구니에 추가하지 못했습니다.')
+                }
+            });
+        }
+        setOrderQuanity(0);
+        setShotQuantity(0);
+        orderRef.current.classList.toggle("shown");
     }
 
     const handleDetails = () => {
@@ -187,35 +238,81 @@ function Product({product}) {
                     {
                         product.productOptions.map(option => {
                             return <ProductOption key={option.optionId} data-key={option.optionId}
-                                                  option={option}></ProductOption>
+                                                  option={option} field={{orderOption: orderOption}}
+                                                  method={{
+                                                      setOrderOption: setOrderOption,
+                                                      addCart: addCart
+                                                  }}></ProductOption>
                         })
                     }
                 </div>
             </div>
-            <div className="item-details" id={product.productId} ref={detailRef}>
+            <div className="item-details order" ref={orderRef}>
+                <span className={"title"}>장바구니 추가</span>
+                {
+                    isNotNull() && (
+                        <div className="item-order-details">
+                            <span>상품명</span><span>{product.productName}</span>
+                            <span>옵션명</span><span>{orderOption.optionName}</span>
+                            <span>수량</span>
+                            <div className="order-quantity-container">
+                                {
+                                    (orderQuantity > 1) && <span className="adjust-quantity" onClick={() => {
+                                        adjustQuantity(-1)
+                                    }}>-</span>
+                                }
+                                <span>{orderQuantity}</span>
+                                <span className="adjust-quantity" onClick={() => {
+                                    adjustQuantity(1)
+                                }}>+</span>
+                            </div>
+                            {
+                                isCoffee(product.categoryName) && (
+                                    <>
+                                        <span>샷 추가</span>
+                                        <div className="order-quantity-container">
+                                            {
+                                                (shotQuantity > 0) && <span className="adjust-quantity" onClick={() => {
+                                                    adjustShotQuantity(-1)
+                                                }}>-</span>
+                                            }
+                                            <span>{shotQuantity}</span>
+                                            <span className="adjust-quantity" onClick={() => {
+                                                adjustShotQuantity(1)
+                                            }}>+</span>
+                                        </div>
+                                    </>
+                                )
+                            }
+                        </div>
+                    )
+                }
+                <div className={"item-order-confirm"}>
+                    <span onClick={() => {
+                        confirmCart(true);
+                    }}>확인</span>
+                    <span onClick={() => {
+                        confirmCart(false);
+                    }
+                    }>취소</span>
+                </div>
+            </div>
+            <div className="item-details info" id={product.productId} ref={detailRef}>
                 <span>{product.productName}</span>
                 <span>{product.productDesc}</span>
                 <span className="close" onClick={() => {
                     handleDetails(product.productId)
                 }}></span>
             </div>
+            <div className="item-add-order"></div>
         </div>
     )
 }
 
-function ProductOption({option}) {
+function ProductOption({option, field, method}) {
+    const orderOption = field.orderOption;
     const setCurrency = (price) => {
         return price.toLocaleString("ko-KR", {maximumFractionDigits: 0});
-    }
-
-    const addCart = (optionId) => {
-        axios.get('/cart/add?optionId=' + optionId)
-            .then(response => {
-                if (response)
-                    alert("장바구니에 추가되었습니다.");
-                else
-                    alert("장바구니에 추가되지 않았습니다.");
-            });
     }
 
     return (
@@ -223,7 +320,7 @@ function ProductOption({option}) {
             <span>{option.optionName}</span>
             <span>{setCurrency(option.optionPrice)}</span>
             <button onClick={() => {
-                addCart(option.optionId)
+                method.addCart(option)
             }}>+ Cart
             </button>
         </div>

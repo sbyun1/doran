@@ -29,6 +29,11 @@ public class MainController {
 
     @GetMapping("/init")
     public ResponseEntity find(HttpSession session) {
+        if (session.getAttribute("cart") == null) {
+            List<OrderItemDto> newCart = new ArrayList<>();
+            session.setAttribute("cart", newCart);
+        }
+
         Map<String, Object> res = new HashMap<>();
 
         List<MenuItemDto> products = productService.findAll();

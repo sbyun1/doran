@@ -47,6 +47,7 @@ function Cart() {
                 <div className="cart-header">
                     <span>상품명</span>
                     <span>옵션</span>
+                    <span>추가옵션</span>
                     <span>수량</span>
                     <span>가격</span>
                     <span></span>
