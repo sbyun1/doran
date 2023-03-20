@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +24,7 @@ public class OrderController {
     @Autowired
     ProductService productService;
 
+    // 결제 방식 선택 없이 주문 처리하는 경우
     @PostMapping("/place")
     public boolean receiveOrder(@RequestBody OrderInfoDto orderInfoDto, HttpSession session) {
         try {
@@ -49,6 +51,10 @@ public class OrderController {
             });
 
             orderService.save(order);
+
+            cart = new ArrayList<>();
+            session.setAttribute("cart", cart);
+            session.setAttribute("orderSeq", 0);
         } catch (Exception e) {
             e.printStackTrace();
             return false;

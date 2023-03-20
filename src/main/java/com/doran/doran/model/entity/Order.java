@@ -20,7 +20,7 @@ public class Order {
     private int orderSeq;
     @Temporal(TemporalType.TIMESTAMP)
     private Date orderDate;
-
+    private String orderPayment;
     @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
     @JsonManagedReference
     private OrderInfo orderInfo;

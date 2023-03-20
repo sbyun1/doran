@@ -122,9 +122,9 @@ function Order() {
         axios.post('/order/place', orderInfo)
             .then(response => {
                 if (response.data) {
-                    alert('주문성공');
+                    alert("주문에 성공하였습니다.")
                 } else {
-                    alert('주문실패');
+                    alert("주문에 실패하였습니다.")
                 }
             })
     }
@@ -172,7 +172,7 @@ function Order() {
                        onClick={() => {
                            placeAnOrder();
                        }}
-                        value="주문하기"/>
+                       value="주문하기"/>
             </div>
         </>
     )
