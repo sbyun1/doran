@@ -7,6 +7,7 @@ import com.doran.doran.model.service.OrderService;
 import com.doran.doran.model.service.ProductService;
 import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -20,9 +21,10 @@ import java.util.Map;
 public class OrderController {
     @Autowired
     OrderService orderService;
-
     @Autowired
     ProductService productService;
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     // 결제 방식 선택 없이 주문 처리하는 경우
     @PostMapping("/place")
@@ -34,7 +36,7 @@ public class OrderController {
             OrderInfo orderInfo = new OrderInfo();
 
             orderInfo.setOrderName(orderInfoDto.getOrderName());
-            orderInfo.setOrderPassword(orderInfoDto.getOrderPassword());
+            orderInfo.setOrderPassword(passwordEncoder.encode(orderInfoDto.getOrderPassword()));
             orderInfo.setOrderMemo(orderInfoDto.getOrderMemo());
 
             order.setOrderInfo(orderInfo);

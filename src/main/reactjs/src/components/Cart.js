@@ -113,6 +113,9 @@ function Order() {
     }
 
     function placeAnOrder() {
+        if (pwdRef.current.value != pwdValidRef.current.value)
+            return false;
+
         let orderInfo = {
             orderName: nameRef.current.value,
             orderPassword: pwdRef.current.value,
