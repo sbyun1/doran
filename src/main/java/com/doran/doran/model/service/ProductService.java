@@ -87,6 +87,10 @@ public class ProductService {
         return res;
     }
 
+    public Optional<ProductOption> findOptionById(Integer optionId){
+        return productOptionRepository.findById(optionId);
+    }
+
     public OrderItemDto findByOption(Integer optionId) {
         Optional<ProductOption> option = productOptionRepository.findById(optionId);
         OrderItemDto dto = new OrderItemDto();
