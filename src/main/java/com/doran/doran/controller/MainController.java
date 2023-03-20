@@ -32,6 +32,7 @@ public class MainController {
         if (session.getAttribute("cart") == null) {
             List<OrderItemDto> newCart = new ArrayList<>();
             session.setAttribute("cart", newCart);
+            session.setAttribute("orderSeq", 0);
         }
 
         Map<String, Object> res = new HashMap<>();

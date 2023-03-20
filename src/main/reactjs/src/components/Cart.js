@@ -11,7 +11,7 @@ function Cart() {
         let currentAmount = 0;
 
         _cart.forEach(ci => {
-            currentAmount += ci.optionQuantity * ci.optionUnitPrice;
+            currentAmount += ci.optionQuantity * ci.optionUnitPrice + ci.shotQuantity * 1000;
         });
 
         setTotalAmount(currentAmount);
@@ -58,7 +58,7 @@ function Cart() {
                 {
                     cart.map(ci => {
                         return <CartItem method={{setCurrency: setCurrency}}
-                                         field={{cartItem: ci, totalAmount}} key={ci.optionId}
+                                         field={{cartItem: ci}} key={ci.optionId}
                                          data-key={ci.optionId}/>
                     })
                 }
@@ -157,9 +157,9 @@ function Order() {
 
 function CartItem({method, field}) {
     const cartItem = field.cartItem;
-    const removeCart = (optionId) => {
+    const removeCart = (orderItemId) => {
         if (window.confirm("상품을 제거하시겠습니까?")) {
-            axios.get('/cart/remove?optionId=' + optionId)
+            axios.get('/cart/remove?orderItemId=' + orderItemId)
                 .then(response => {
                     if (response)
                         alert("상품이 제거되었습니다.");
@@ -171,41 +171,44 @@ function CartItem({method, field}) {
         }
     }
 
-    const quanRef = useRef()
-    const priceRef = useRef()
-
     const setQuantity = (change, cartItem) => {
-        const optionId = cartItem.optionId;
-        const optionQuantity = cartItem.optionQuantity;
+        let newItem = cartItem;
+        newItem.optionQuantity += change;
 
-        const changedValue = change + Number(optionQuantity);
-        if (changedValue <= 0) {
-            return
-        }
-
-        axios.get('/cart/setQuantity?optionId=' + optionId + '&optionQuantity=' + changedValue)
-            .then(response => {
-                if (response.data)
-                    window.location.reload()
-            })
+        axios.post('/cart/setQuantity', newItem).then(response => {
+            if (response.data)
+                window.location.reload();
+        })
     }
 
     return (
         <div className="cart-figure">
             <span>{cartItem.productName}</span>
             <span>{cartItem.optionName}</span>
+            <span>{
+                (cartItem.shotQuantity > 0) && ('샷추가(+' + cartItem.shotQuantity + ')')
+            }</span>
             <div className="cart-figure-quantity">
-                <div className="adjust-quantity plus" onClick={() => {
-                    setQuantity(-1, cartItem)
-                }}/>
-                <span ref={quanRef}>{cartItem.optionQuantity}</span>
-                <div className="adjust-quantity minus" onClick={() => {
-                    setQuantity(1, cartItem)
-                }}/>
+                {
+                    (cartItem.optionQuantity > 1) ?
+                        (
+                            <span className="adjust-quantity" onClick={() => {
+                                setQuantity(-1, cartItem)
+                            }}>-</span>
+                        )
+                        :
+                        (
+                            <span></span>
+                        )
+                }
+                <span>{cartItem.optionQuantity}</span>
+                <span className="adjust-quantity" onClick={() => {
+                    setQuantity(+1, cartItem)
+                }}>+</span>
             </div>
-            <span ref={priceRef}>{method.setCurrency(cartItem.optionUnitPrice * cartItem.optionQuantity)}</span>
+            <span>{method.setCurrency(cartItem.optionUnitPrice * cartItem.optionQuantity + 1000 * cartItem.shotQuantity)}</span>
             <button onClick={() => {
-                removeCart(cartItem.optionId);
+                removeCart(cartItem.orderItemId);
                 window.location.reload();
             }
             }>제거

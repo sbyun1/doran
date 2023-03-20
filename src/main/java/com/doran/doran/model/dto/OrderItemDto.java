@@ -1,6 +1,7 @@
 package com.doran.doran.model.dto;
 
 public class OrderItemDto extends ItemDto {
+    private int orderItemId;
     private int optionId;
     private String optionName;
     private int optionQuantity;
@@ -9,6 +10,14 @@ public class OrderItemDto extends ItemDto {
     private int optionUnitPrice;
 
     private int shotQuantity;
+
+    public int getOrderItemId() {
+        return orderItemId;
+    }
+
+    public void setOrderItemId(int orderItemId) {
+        this.orderItemId = orderItemId;
+    }
 
     public int getShotQuantity() {
         return shotQuantity;

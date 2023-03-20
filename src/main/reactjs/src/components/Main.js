@@ -167,6 +167,7 @@ function Search({field, method}) {
 function Product({product}) {
     const detailRef = useRef(null);
     const orderRef = useRef(null);
+    const confirmRef = useRef(null);
     const [orderQuantity, setOrderQuanity] = useState(0);
     const [shotQuantity, setShotQuantity] = useState(0);
     const [orderOption, setOrderOption] = useState(null);
@@ -197,6 +198,7 @@ function Product({product}) {
         setOrderOption(option);
         setOrderQuanity(1);
         orderRef.current.classList.toggle("shown");
+        confirmRef.current.focus();
     }
 
     const confirmCart = (confirmFlag) => {
@@ -211,9 +213,8 @@ function Product({product}) {
                 if (response.data) {
                     if (window.confirm('장바구니에 추가되었습니다. 장바구니로 이동하시겠습니까?'))
                         window.location.href = '/cart';
-                    else
-                        alert('장바구니에 추가하지 못했습니다.')
-                }
+                } else
+                    alert('장바구니에 추가하지 못했습니다.')
             });
         }
         setOrderQuanity(0);
@@ -254,6 +255,28 @@ function Product({product}) {
                         <div className="item-order-details">
                             <span>상품명</span><span>{product.productName}</span>
                             <span>옵션명</span><span>{orderOption.optionName}</span>
+                            {
+                                isCoffee(product.categoryName) && (
+                                    <>
+                                        <span>샷 추가(+1,000)</span>
+                                        <div className="order-quantity-container">
+                                            {
+                                                (shotQuantity > 0) && <span className="adjust-quantity" onClick={() => {
+                                                    adjustShotQuantity(-1)
+                                                }}>-</span>
+                                            }
+                                            <span>
+                                                {
+                                                    (shotQuantity == 0) ? '없음' : shotQuantity
+                                                }
+                                            </span>
+                                            <span className="adjust-quantity" onClick={() => {
+                                                adjustShotQuantity(1)
+                                            }}>+</span>
+                                        </div>
+                                    </>
+                                )
+                            }
                             <span>수량</span>
                             <div className="order-quantity-container">
                                 {
@@ -266,35 +289,20 @@ function Product({product}) {
                                     adjustQuantity(1)
                                 }}>+</span>
                             </div>
-                            {
-                                isCoffee(product.categoryName) && (
-                                    <>
-                                        <span>샷 추가</span>
-                                        <div className="order-quantity-container">
-                                            {
-                                                (shotQuantity > 0) && <span className="adjust-quantity" onClick={() => {
-                                                    adjustShotQuantity(-1)
-                                                }}>-</span>
-                                            }
-                                            <span>{shotQuantity}</span>
-                                            <span className="adjust-quantity" onClick={() => {
-                                                adjustShotQuantity(1)
-                                            }}>+</span>
-                                        </div>
-                                    </>
-                                )
-                            }
+                            <span>가격</span>
+                            <span>{
+                                (orderQuantity * orderOption.optionPrice + 1000 * shotQuantity).toLocaleString("ko-KR", {maximumFractionDigits: 0})
+                            }</span>
                         </div>
                     )
                 }
                 <div className={"item-order-confirm"}>
-                    <span onClick={() => {
-                        confirmCart(true);
-                    }}>확인</span>
-                    <span onClick={() => {
-                        confirmCart(false);
-                    }
-                    }>취소</span>
+                    <input type="button" ref={confirmRef} onClick={() => {
+                        confirmCart(true)
+                    }} value="확인"/>
+                    <input type="button" onClick={() => {
+                        confirmCart(false)
+                    }} value="취소"/>
                 </div>
             </div>
             <div className="item-details info" id={product.productId} ref={detailRef}>
@@ -309,7 +317,9 @@ function Product({product}) {
     )
 }
 
-function ProductOption({option, field, method}) {
+function ProductOption({
+                           option, field, method
+                       }) {
     const orderOption = field.orderOption;
     const setCurrency = (price) => {
         return price.toLocaleString("ko-KR", {maximumFractionDigits: 0});
