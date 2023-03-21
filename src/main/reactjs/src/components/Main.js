@@ -167,6 +167,7 @@ function Search({field, method}) {
 }
 
 function Product({product}) {
+    const productRef = useRef(null);
     const detailRef = useRef(null);
     const orderRef = useRef(null);
     const confirmRef = useRef(null);
@@ -229,7 +230,7 @@ function Product({product}) {
     }
 
     return (
-        <div className="product-figure">
+        <div className="product-figure" ref={productRef}>
             <div className="item-info">
                 <div className="item-info-product" onClick={() => {
                     handleDetails(product.productId)

@@ -10,6 +10,7 @@
     grid-template-columns: repeat(4, 1fr);
     font-weight: 700;
     border: solid gray 1px;
+    background-color: white;
 }
 
 .product-category > * {
@@ -54,6 +55,7 @@
 }
 
 .product-list {
+    width: 1280px;
     display: grid;
     gap: 10px;
     grid-template-columns: repeat(4, 1fr);
@@ -104,8 +106,10 @@
 }
 
 .product-figure {
+    width: 100%;
+    display: grid;
     position: relative;
-    width: 312.5px;
+    padding: 50px 0 50px 0;
 }
 
 .item-info {
