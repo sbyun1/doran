@@ -1,6 +1,8 @@
 function Payment() {
     return (
-    <div></div>
+        <div>
+
+        </div>
     )
 }
 

@@ -141,9 +141,9 @@ function Order() {
         axios.post('/order/place', orderInfo)
             .then(response => {
                 if (response.data) {
-                    alert("주문에 성공하였습니다.")
+                    window.location.href = "/order/selectPayment";
                 } else {
-                    alert("주문에 실패하였습니다.")
+                    alert("주문에 실패하였습니다.");
                 }
             })
     }
