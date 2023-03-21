@@ -39,7 +39,7 @@ public class OrderController {
             orderInfo.setOrderPassword(passwordEncoder.encode(orderInfoDto.getOrderPassword()));
             orderInfo.setOrderMemo(orderInfoDto.getOrderMemo());
 
-            order.setOrderInfo(orderInfo);
+            order.addOrderInfo(orderInfo);
             order.setOrderDate();
             order.setOrderStatus(OrderStatus.received);
 
