@@ -26,34 +26,18 @@ public class OrderController {
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    // 결제 방식 선택 없이 주문 처리하는 경우
+    // 결제 방식 선택 후 주문 정보를 저장하도록 변경
     @PostMapping("/place")
     public boolean receiveOrder(@RequestBody @Validated OrderInfoDto orderInfoDto, HttpSession session) {
         try {
-            Order order = new Order();
             List<OrderItemDto> cart = (List<OrderItemDto>) session.getAttribute("cart");
 
-            OrderInfo orderInfo = new OrderInfo();
+            if (cart == null || cart.size() == 0) {
+                return false;
+            }
 
-            orderInfo.setOrderName(orderInfoDto.getOrderName());
-            orderInfo.setOrderPassword(passwordEncoder.encode(orderInfoDto.getOrderPassword()));
-            orderInfo.setOrderMemo(orderInfoDto.getOrderMemo());
-
-            order.addOrderInfo(orderInfo);
-            order.setOrderDate();
-            order.setOrderStatus(OrderStatus.received);
-
-            cart.forEach(cartItem -> {
-                OrderItem orderItem = new OrderItem();
-                orderItem.setOrderItem(productService.findOptionById(cartItem.getOptionId()).get());
-                orderItem.setOrderQuantity(cartItem.getOptionQuantity());
-                orderItem.setOrderShotQuantity(cartItem.getShotQuantity());
-
-                order.addOrderItems(orderItem);
-            });
-
-            Order orderConfirm = orderService.save(order);
-            session.setAttribute("order", orderConfirm);
+            orderInfoDto.setOrderPassword(passwordEncoder.encode(orderInfoDto.getOrderPassword()));
+            session.setAttribute("orderInfo", orderInfoDto);
         } catch (Exception e) {
             e.printStackTrace();
             return false;

@@ -3,6 +3,8 @@ package com.doran.doran.model.entity;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -34,7 +36,7 @@ public class Order {
     private List<OrderItem> orderItems = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
-    private OrderStatus orderStatus;
+    private OrderStatus orderStatus = OrderStatus.received;
 
     public void addOrderInfo(OrderInfo orderInfo) {
         this.setOrderInfo(orderInfo);
@@ -49,4 +51,11 @@ public class Order {
     public void setOrderDate() {
         orderDate = new Date();
     }
+}
+
+enum OrderStatus {
+    received,
+    inProgress,
+    finished,
+    rejected;
 }
