@@ -117,8 +117,13 @@ function Order() {
     }
 
     function placeAnOrder() {
-        if (pwdRef.current.value != pwdValidRef.current.value)
+        if (pwdRef.current.value != pwdValidRef.current.value) {
+            alert('비밀번호가 일치하지 않습니다.')
             return false;
+        } else if (nameRef.current.value.trim() == '') {
+            alert('주문자명을 올바르게 입력하세요.')
+            return false;
+        }
 
         let orderInfo = {
             orderName: nameRef.current.value,
