@@ -49,7 +49,7 @@ function Cart() {
                     <span>옵션</span>
                     <span>추가옵션</span>
                     <span>수량</span>
-                    <span>가격</span>
+                    <span>소계</span>
                     <span></span>
                 </div>
                 {
@@ -63,130 +63,27 @@ function Cart() {
                     })
                 }
                 <div className="cart-total">
-                    <span>총 금액</span>
+                    <span>총 결제 금액</span>
                     <span>{setCurrency(totalAmount)}</span>
                 </div>
             </div>
-            {
-                !isEmpty() && <Order/>
-            }
+            <div className={"cart-confirm"}>
+                <input type={"button"} value={"계속 담기"} onClick={
+                    () => {
+                        window.location.href = "/"
+                    }
+                }/>
+                <input type={"button"} value={"주문하기"} onClick={
+                    () => {
+                        if (isEmpty()) {
+                            alert("장바구니에 아이템이 없습니다.");
+                            return false;
+                        }
+                        window.location.href = "/order/pay"
+                    }
+                }/>
+            </div>
         </div>
-    )
-}
-
-function Order() {
-    const nameRef = useRef(null);
-    const pwdRef = useRef(null);
-    const pwdValidRef = useRef(null);
-    const memoRef = useRef(null);
-    const ordConfirmRef = useRef(null);
-
-    useEffect(() => {
-        ordConfirmRef.current.disabled = true;
-    }, [])
-
-    const isSixDigits = (orderPwd) => {
-        return !!orderPwd.match(/^\d{6}$/);
-    }
-
-    function checkPwd() {
-        pwdValidRef.current.value = null;
-
-        if (isSixDigits(pwdRef.current.value)) {
-            pwdValidRef.current.disabled = false;
-            pwdValidRef.current.focus();
-        } else {
-            pwdValidRef.current.disabled = true;
-        }
-    }
-
-    function checkNaN(e) {
-        if (isNaN(e.key) || pwdValidRef.current.value.length > 5) {
-            e.preventDefault();
-        }
-    }
-
-    function checkPwdValid() {
-        if (pwdRef.current.value == pwdValidRef.current.value) {
-            ordConfirmRef.current.disabled = false;
-            ordConfirmRef.current.title = '클릭 시 주문이 완료됩니다.';
-        } else {
-            ordConfirmRef.current.disabled = true;
-            ordConfirmRef.current.title = '비밀번호 확인 후 활성화됩니다.';
-        }
-    }
-
-    function placeAnOrder() {
-        if (pwdRef.current.value != pwdValidRef.current.value) {
-            alert('비밀번호가 일치하지 않습니다.')
-            return false;
-        } else if (nameRef.current.value.trim() == '') {
-            alert('주문자명을 올바르게 입력하세요.')
-            return false;
-        }
-
-        let orderInfo = {
-            orderName: nameRef.current.value,
-            orderPassword: pwdRef.current.value,
-            orderMemo: memoRef.current.value
-        }
-
-        axios.post('/order/place', orderInfo)
-            .then(response => {
-                if (response.data) {
-                    alert("주문에 성공하였습니다.")
-                } else {
-                    alert("주문에 실패하였습니다.")
-                }
-            })
-    }
-
-    return (
-        <>
-            <div className="order-top">
-                <span>주문정보</span>
-                <span>* 주문정보는 고객 식별, 구매 및 결제를 위해 사용됩니다.</span>
-            </div>
-            <div className="order-info">
-                <div>
-                    <span>주문자명</span><input type="text" name="orderName" ref={nameRef} placeholder="이름"/>
-                </div>
-                <div>
-                    <span>비밀번호</span><input type="password" name="orderPassword"
-                                            ref={pwdRef}
-                                            onChange={() => {
-                                                checkPwd()
-                                            }}
-                                            onKeyPress={(e) => {
-                                                checkNaN(e.nativeEvent)
-                                            }}
-                                            placeholder="비밀번호 숫자 6자리"/>
-                </div>
-                <div>
-                    <span>비밀번호 확인</span><input type="password" name="orderPasswordConfirm"
-                                               ref={pwdValidRef} disabled
-                                               onChange={() => {
-                                                   checkPwdValid()
-                                               }}
-                                               onKeyPress={(e) => {
-                                                   checkNaN(e.nativeEvent)
-                                               }}
-                                               placeholder="비밀번호 숫자 6자리 확인"/>
-                </div>
-                <div>
-                    <span>메모</span><textarea name="orderMemo" ref={memoRef} placeholder="요청사항 입력"/>
-                </div>
-            </div>
-            <div className="order-confirm">
-                <input type="button" className={`order-confirm-button`}
-                       name="orderConfirmButton"
-                       ref={ordConfirmRef} title={"비밀번호 확인 후 활성화됩니다."}
-                       onClick={() => {
-                           placeAnOrder();
-                       }}
-                       value="주문하기"/>
-            </div>
-        </>
     )
 }
 

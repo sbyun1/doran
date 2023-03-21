@@ -1,0 +1,105 @@
+.order-container {
+    width: 1280px;
+    display: grid;
+    gap: 100px;
+    justify-items: stretch;
+    align-items: stretch;
+}
+
+.order-container > * {
+    display: grid;
+    gap: 20px
+}
+
+.order-info, .order-list, .payment-list {
+    display: grid;
+    gap: 30px;
+    background-color: rgba(252, 252, 252);
+    padding: 30px 0 30px 0;
+}
+
+.payment-list {
+    grid-template-columns: repeat(2, 1fr);
+    justify-items: center;
+    align-items: center;
+}
+
+.payment-list > * {
+    padding: 20px 60px 20px 60px;
+}
+
+.order-list > * {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    justify-items: center;
+    align-items: center;
+}
+
+.order-header {
+    font-weight: bold;
+    font-size: large;
+}
+
+.order-item-info {
+    display: grid;
+}
+
+
+.order-info > * {
+    display: grid;
+    grid-template-columns: 30% 70%;
+    justify-items: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.order-info > * > input, textarea {
+    width: 50%;
+    background: white;
+    border: solid 1px darkgray;
+    text-align: center;
+    padding: 10px;
+}
+
+.order-info > * > input[type=password]:disabled {
+    color: white;
+    background-color: gainsboro;
+}
+
+.order-info > * > textarea {
+    resize: none;
+}
+
+.order-info > * > *:first-child {
+    font-size: large;
+    font-weight: bold;
+}
+
+.order-info > * > *:nth-child(2) {
+    font-size: large;
+}
+
+.order-info > * > span:last-child {
+    grid-column-start: 2;
+    font-size: small;
+}
+
+.order-confirm {
+    display: grid;
+    gap: 10px;
+    align-items: center;
+}
+
+.order-confirm-button {
+    padding: 10px 20px 10px 20px;
+    font-size: large;
+    font-weight: 700;
+    border: none;
+    transition: 0.3s;
+}
+
+.order-confirm-button:enabled:hover {
+    background-color: gold;
+    color: white;
+    cursor: pointer;
+}

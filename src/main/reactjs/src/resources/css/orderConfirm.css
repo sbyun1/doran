@@ -1,0 +1,65 @@
+
+.order-top > *:first-child,
+.order-bottom > *:first-child {
+    font-size: x-large;
+    font-weight: 700;
+    background: linear-gradient(to top, gold 50%, transparent 50%);
+}
+
+.order-info > * > *:first-child {
+    font-weight: 700;
+}
+
+.order-info {
+    display: grid;
+    gap: 20px;
+    font-size: large;
+    padding: 20px;
+    background-color: rgb(252, 252, 252);
+}
+
+.order-info > * > * {
+    margin-block: 10px;
+}
+
+.products-list {
+    display: grid;
+    gap: 10px;
+    font-size: medium;
+}
+
+.products-list > * {
+    display: grid;
+    grid-template-columns: 40% 40% 20%;
+}
+
+.products-list > *:first-child {
+    font-weight: 700;
+}
+
+.order-status {
+    width: 1280px;
+    display: grid;
+    grid-template-columns: 30% 5% 30% 5% 30%;
+    gap: 10px;
+}
+
+.order-status > * {
+    display: grid;
+    justify-items: center;
+    align-items: center;
+}
+
+.order-state {
+    padding: 100px 50px 100px 50px;
+    background-color: gainsboro;
+}
+
+.order-state.current {
+    background-color: gold;
+}
+
+.order-state > span:first-child {
+    font-weight: 700;
+    font-size: larger;
+}
