@@ -3,8 +3,6 @@ package com.doran.doran.model.entity;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.DynamicInsert;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -15,7 +13,6 @@ import java.util.List;
 @Getter
 @Setter
 @Table(name = "ORDER_TABLE")
-@DynamicInsert
 public class Order {
     @Id
     @GeneratedValue
@@ -38,6 +35,11 @@ public class Order {
 
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
+
+    public void addOrderInfo(OrderInfo orderInfo) {
+        this.setOrderInfo(orderInfo);
+        orderInfo.setOrder(this);
+    }
 
     public void addOrderItems(OrderItem orderItem) {
         orderItems.add(orderItem);

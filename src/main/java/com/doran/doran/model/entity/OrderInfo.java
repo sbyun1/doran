@@ -1,5 +1,6 @@
 package com.doran.doran.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,7 +13,7 @@ import javax.validation.constraints.Size;
 @Table(name = "ORDER_INFO")
 public class OrderInfo {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int orderInfoId;
 
     @Column(nullable = false)
@@ -25,6 +26,9 @@ public class OrderInfo {
     private String orderMemo;
 
     private String orderTel;
+
     @OneToOne
+    @JsonBackReference
+    @JoinColumn(name = "orderId")
     private Order order;
 }
