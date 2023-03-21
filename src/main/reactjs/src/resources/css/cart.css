@@ -16,7 +16,6 @@
     display: grid;
     grid-template-columns: 25% 20% 20% 10% 20% 5%;
     text-align: center;
-    font-size: large;
     padding: 30px;
 }
 
@@ -54,70 +53,37 @@
     grid-column-start: 5;
 }
 
-.order-info {
-    display: grid;
-    gap: 20px;
-    background-color: rgba(252, 252, 252);
+.cart-header {
+    border-bottom: solid 1px #fafafa;
 }
 
-.order-info > * {
-    display: grid;
-    grid-template-columns: 30% 70%;
-    justify-items: center;
-    align-items: center;
-    gap: 10px;
-    padding: 30px 0 30px 0;
+.cart-total {
+    border-top: solid 1px #fafafa;
 }
 
-.order-info > * > input, textarea {
-    width: 50%;
+.cart-figure {
     background: white;
-    border: solid 1px darkgray;
-    text-align: center;
-    padding: 10px;
 }
 
-.order-info > * > input[type=password]:disabled {
-    color: white;
-    background-color: gainsboro;
-}
-
-.order-info > * > textarea {
-    resize: none;
-}
-
-.order-info > * > *:first-child {
-    font-size: large;
-    font-weight: bold;
-}
-
-.order-info > * > *:nth-child(2) {
-    font-size: large;
-}
-
-.order-info > * > span:last-child {
-    grid-column-start: 2;
-    font-size: small;
-}
-
-.order-confirm {
+.cart-confirm {
     display: grid;
-    gap: 10px;
+    grid-template-columns: repeat(2, 1fr);
+    justify-self: right;
     align-items: center;
+    gap: 20px;
 }
 
-.order-confirm-button {
-    padding: 10px 20px 10px 20px;
-    font-size: large;
-    font-weight: 700;
-    border: none;
+.cart-confirm > * {
+    padding: 10px 30px 10px 30px;
+    font-weight: bold;
     transition: 0.3s;
+    border: solid 1px gainsboro;
+    font-size: large;
 }
 
-.order-confirm-button:enabled:hover {
-    background-color: gold;
+.cart-confirm > *:hover {
+    background: gold;
     color: white;
-    cursor: pointer;
 }
 
 .adjust-quantity {

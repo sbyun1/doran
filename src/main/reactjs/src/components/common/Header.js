@@ -21,7 +21,9 @@ function Header() {
                 <span onClick={() => {
                     window.location.href = '/cart'
                 }}>Cart</span>
-                <span>Order</span>
+                <span onClick={() => {
+                    window.location.href = '/order/confirm'
+                }}>Order</span>
             </div>
         </div>
     )
