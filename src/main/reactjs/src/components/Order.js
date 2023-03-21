@@ -62,10 +62,15 @@ function OrderItem({field, method}) {
         <div className={"order-item-figure"}>
             <div className={"order-item-info"}>
                 <span>{orderItem.productName}</span>
-                <span>{orderItem.optionName}</span>
-                {
-                    (orderItem.shotQuantity > 0) && <span>샷 추가(+{orderItem.shotQuantity})</span>
-                }
+                <div>
+                    <span>옵션 : {orderItem.optionName}</span>
+                    {
+                        (orderItem.shotQuantity > 0) &&
+                        <span>
+                        추가 옵션 : 샷 추가(+{orderItem.shotQuantity})
+                    </span>
+                    }
+                </div>
             </div>
             <span>{orderItem.optionQuantity}</span>
             <span
@@ -147,7 +152,7 @@ function OrderInfo() {
         <div>
             <div className="order-top">
                 <span>주문고객정보</span>
-                <span>* 주문정보는 고객 식별, 구매 및 결제를 위해 사용됩니다.</span>
+                <span>주문정보는 고객 식별, 구매 및 결제를 위해 사용됩니다.</span>
             </div>
             <div className="order-info">
                 <div>

@@ -35,15 +35,33 @@
     align-items: center;
 }
 
-.order-header {
-    font-weight: bold;
+.order-header > * {
+    font-weight: bolder;
     font-size: large;
 }
 
 .order-item-info {
     display: grid;
+    justify-items: center;
+    align-items: center;
+    gap: 10px;
 }
 
+.order-item-info > div {
+    width: 150px;
+    display: grid;
+    font-size: small;
+    justify-items: center;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 20px 5px 20px;
+}
+
+.order-top {
+    display: grid;
+    justify-items: left;
+    gap: 10px;
+}
 
 .order-info > * {
     display: grid;
