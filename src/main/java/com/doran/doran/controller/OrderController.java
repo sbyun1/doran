@@ -40,7 +40,7 @@ public class OrderController {
             orderInfo.setOrderMemo(orderInfoDto.getOrderMemo());
 
             order.setOrderInfo(orderInfo);
-            order.setOrderDate(new Date());
+            order.setOrderDate();
             order.setOrderStatus(OrderStatus.received);
 
             cart.forEach(cartItem -> {

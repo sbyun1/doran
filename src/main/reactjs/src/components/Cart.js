@@ -100,6 +100,13 @@ function Order() {
         }
     }
 
+    function checkName(e) {
+        if (nameRef.current.value.length > 10) {
+            e.preventDefault();
+            alert('10자 이하의 이름을 입력하세요.')
+        }
+    }
+
     function checkNaN(e) {
         if (isNaN(e.key) || pwdValidRef.current.value.length > 5) {
             e.preventDefault();
@@ -149,7 +156,13 @@ function Order() {
             </div>
             <div className="order-info">
                 <div>
-                    <span>주문자명</span><input type="text" name="orderName" ref={nameRef} placeholder="이름"/>
+                    <span>주문자명</span><input type="text" name="orderName" ref={nameRef}
+                                            onKeyPress={
+                                                (e) => {
+                                                    checkName(e.nativeEvent)
+                                                }
+                                            }
+                                            placeholder="이름(10자 이하)"/>
                 </div>
                 <div>
                     <span>비밀번호</span><input type="password" name="orderPassword"
