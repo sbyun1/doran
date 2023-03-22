@@ -3,7 +3,6 @@
 .order-bottom > *:first-child {
     font-size: x-large;
     font-weight: 700;
-    background: linear-gradient(to top, gold 50%, transparent 50%);
 }
 
 .order-info > * > *:first-child {

@@ -1,7 +1,6 @@
 .order-container {
-    width: 1280px;
     display: grid;
-    gap: 100px;
+    gap: 50px;
     justify-items: stretch;
     align-items: stretch;
 }
@@ -11,21 +10,20 @@
     gap: 20px
 }
 
-.order-info, .order-list, .payment-list {
-    display: grid;
-    gap: 30px;
-    background-color: rgba(252, 252, 252);
-    padding: 30px 0 30px 0;
-}
-
 .payment-list {
-    grid-template-columns: repeat(2, 1fr);
-    justify-items: center;
+    display: grid;
     align-items: center;
 }
 
 .payment-list > * {
-    padding: 20px 60px 20px 60px;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    column-gap: 50px;
+    align-items: center;
+}
+
+.payment-type > *:first-child {
+    font-weight: bold;
 }
 
 .order-list > * {
@@ -35,26 +33,28 @@
     align-items: center;
 }
 
-.order-header > * {
-    font-weight: bolder;
-    font-size: large;
-}
-
 .order-item-info {
     display: grid;
+    grid-template-columns: repeat(2, 1fr);
     justify-items: center;
     align-items: center;
     gap: 10px;
 }
 
-.order-item-info > div {
-    width: 150px;
+.order-item-option {
     display: grid;
-    font-size: small;
+    gap: 10px;
     justify-items: center;
     align-items: center;
-    gap: 5px;
-    padding: 5px 20px 5px 20px;
+    font-size: small;
+}
+
+.order-item-option > div {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    justify-items: left;
+    align-items: center;
 }
 
 .order-top {
@@ -63,7 +63,7 @@
     gap: 10px;
 }
 
-.order-info > * {
+.order-customer > * {
     display: grid;
     grid-template-columns: 30% 70%;
     justify-items: center;
@@ -71,7 +71,7 @@
     gap: 10px;
 }
 
-.order-info > * > input, textarea {
+.order-customer > * > input, textarea {
     width: 50%;
     background: white;
     border: solid 1px darkgray;
@@ -79,25 +79,21 @@
     padding: 10px;
 }
 
-.order-info > * > input[type=password]:disabled {
+.order-customer > * > input[type=password]:disabled {
     color: white;
     background-color: gainsboro;
 }
 
-.order-info > * > textarea {
+.order-customer > * > textarea {
     resize: none;
 }
 
-.order-info > * > *:first-child {
-    font-size: large;
+.order-customer > * > *:first-child {
     font-weight: bold;
 }
 
-.order-info > * > *:nth-child(2) {
-    font-size: large;
-}
 
-.order-info > * > span:last-child {
+.order-customer > * > span:last-child {
     grid-column-start: 2;
     font-size: small;
 }
@@ -110,7 +106,6 @@
 
 .order-confirm-button {
     padding: 10px 20px 10px 20px;
-    font-size: large;
     font-weight: 700;
     border: none;
     transition: 0.3s;
@@ -120,4 +115,8 @@
     background-color: gold;
     color: white;
     cursor: pointer;
+}
+
+.payment-checkbox {
+    margin-right: 15px;
 }

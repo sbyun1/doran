@@ -7,7 +7,7 @@ import * as PropTypes from "prop-types";
 function Cart() {
     const [mode, setMode] = useState(0);
     const [cart, setCart] = useState([]);
-    const [totalAmount, setTotalAmount] = useState(0);
+    const [totalPrice, setTotalPrice] = useState(0);
 
     const calculateAmount = (_cart) => {
         let currentAmount = 0;
@@ -16,7 +16,7 @@ function Cart() {
             currentAmount += ci.optionQuantity * ci.optionUnitPrice + ci.shotQuantity * 1000;
         });
 
-        setTotalAmount(currentAmount);
+        setTotalPrice(currentAmount);
     }
 
     const selectList = () => {
@@ -65,7 +65,7 @@ function Cart() {
                 }
                 <div className="cart-total item-table-footer">
                     <span>총 결제 금액</span>
-                    <span>{setCurrency(totalAmount)}원</span>
+                    <span>{setCurrency(totalPrice)}원</span>
                 </div>
             </div>
             <div className={"cart-confirm"}>
@@ -123,7 +123,7 @@ class CartItem extends Component {
                 </div>
                 <div className={"cart-item-option"}>
                     <div>
-                        <span>옵션</span>
+                        <span className={"item-option-label"}>옵션</span>
                         <span>{cartItem.optionName}</span>
                     </div>
                     {
@@ -131,7 +131,7 @@ class CartItem extends Component {
                         &&
                         (
                             <div>
-                                <span>추가</span>
+                                <span className={"item-option-label"}>추가</span>
                                 <span>샷 추가 (+{cartItem.shotQuantity})</span>
                             </div>
                         )

@@ -15,7 +15,7 @@ body * {
 
 .common.top {
     padding: 50px 0 50px 0;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
     margin-bottom: 50px;
 }
 
