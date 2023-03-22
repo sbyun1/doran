@@ -1,8 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Homemade+Apple&family=Nanum+Myeongjo&family=Noto+Sans+KR:wght@100&family=Reenie+Beanie&family=Sassy+Frass&family=Song+Myung&display=swap');
+@import url('https://cdn.rawgit.com/moonspam/NanumSquare/master/nanumsquare.css');
 
 body * {
     margin: 0;
-    font-family: 'Noto Sans KR', cursive;
+    font-family: 'nanumsquare', cursive;
+    font-weight: 400;
 }
 
 .common {
@@ -11,36 +13,50 @@ body * {
     gap: 50px;
 }
 
-.common {
-    margin-bottom: 30px;
+.common.top {
+    padding: 50px 0 50px 0;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+    margin-bottom: 50px;
 }
 
-.common-header,
 .common-nav {
-    font-family: 'Homemade Apple', cursive !important;
     text-align: center;
-}
-
-.common-header {
-    height: 200px;
-    display: grid;
-    text-align: center;
-}
-
-.common .logo {
-    display: grid;
-    align-items: center;
-    font-size: 30pt;
 }
 
 .common-nav {
     width: 1280px;
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    justify-items: center;
+    align-items: center;
 }
 
-.common-header *:hover,
-.common-nav *:hover {
+.common-nav > * {
+    width: 50%;
+    transition: 0.3s;
+}
+
+.common-nav > *:hover {
     cursor: pointer;
-    text-shadow: 2px 2px 0 gold;
+    box-shadow: 0 5px 0 rgba(255, 215, 0, 1);
+}
+
+.common-nav > *:nth-child(4) {
+    grid-column-start: 8;
+}
+
+.common-nav > *:last-child {
+    grid-column-start: 9;
+}
+
+.common-nav-logo {
+    font-weight: bold;
+}
+
+.common-nav-logo:hover {
+    cursor: default;
+    box-shadow: none;
+}
+
+.nav-description {
+    font-size: small;
 }
