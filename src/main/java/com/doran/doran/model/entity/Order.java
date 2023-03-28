@@ -47,7 +47,7 @@ public class Order {
 
     public void addOrderItems(OrderItem orderItem) {
         orderItems.add(orderItem);
-        orderTotalPrice += orderItem.getOrderOptionPrice();
+        orderTotalPrice += orderItem.getOrderItemPrice();
         orderItem.setOrder(this);
     }
 

@@ -1,4 +1,4 @@
-package com.doran.doran.security;
+package com.doran.doran.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
