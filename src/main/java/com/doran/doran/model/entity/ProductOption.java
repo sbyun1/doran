@@ -2,6 +2,7 @@ package com.doran.doran.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -9,6 +10,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 @Table(name = "PRODUCT_OPTION")
 public class ProductOption {
     @Id

@@ -2,6 +2,7 @@ package com.doran.doran.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -10,6 +11,7 @@ import javax.validation.constraints.Size;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 @Table(name = "ORDER_INFO")
 public class OrderInfo {
     @Id
