@@ -26,6 +26,10 @@
     font-weight: bold;
 }
 
+.order-total > *:first-child {
+    grid-column-start: 2;
+}
+
 .order-list > * {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -98,23 +102,21 @@
     font-size: small;
 }
 
-.order-confirm {
-    display: grid;
-    gap: 10px;
-    align-items: center;
+.order-validation {
+    color: red;
 }
 
-.order-confirm-button {
-    padding: 10px 20px 10px 20px;
-    font-weight: 700;
-    border: none;
-    transition: 0.3s;
+.order-validation.hidden {
+    display: none;
 }
 
-.order-confirm-button:enabled:hover {
-    background-color: gold;
-    color: white;
-    cursor: pointer;
+.order-validation.valid {
+    color: green;
+}
+
+.order-info-desc {
+    font-size: small;
+    justify-self: right;
 }
 
 .payment-checkbox {

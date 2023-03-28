@@ -30,7 +30,18 @@ function Order() {
                     }
                 }
             )
+        } else {
+            alert('[필수 입력 사항] 및 [결제 방식]을 확인하신 후 다시 시도하세요.');
         }
+    }
+
+    function checkOrder() {
+        axios.get('/order/check').then(response => {
+            const data = response.data;
+            if (data.orderState) {
+                alert('주문이 완료되었습니다.');
+            }
+        });
     }
 
     return (
@@ -46,7 +57,7 @@ function Order() {
                             window.history.back();
                         }
                     }/>
-                    <input type={"button"} value={"주문하기"} onClick={
+                    <input type={"button"} value={"결제하기"} onClick={
                         () => {
                             placeAnOrder();
                         }
@@ -102,6 +113,10 @@ function OrderItems() {
                         )
                     })
                 }
+                <div className={"order-total item-table-footer"}>
+                    <span>총 결제 금액</span>
+                    <span>{setCurrency(totalPrice)}원</span>
+                </div>
             </div>
         </div>
     )
@@ -142,7 +157,8 @@ function OrderInfo({field, method}) {
     const nameRef = useRef(null);
     const pwdRef = useRef(null);
     const pwdValidRef = useRef(null);
-    const memoRef = useRef(null);
+
+    const pwdValidDescRef = useRef(null);
 
     const isSixDigits = (orderPwd) => {
         return !!orderPwd.match(/^\d{6}$/);
@@ -151,11 +167,11 @@ function OrderInfo({field, method}) {
     function setProperty(currentValue, propertyName) {
         let currentInfo = orderInfo;
         if (propertyName == 'orderName') {
-            currentInfo.orderName = currentValue;
+            currentInfo.orderName = currentValue.trim();
         } else if (propertyName == 'orderPassword') {
-            currentInfo.orderPassword = currentValue;
+            currentInfo.orderPassword = currentValue.trim();
         } else if (propertyName == 'orderMemo') {
-            currentInfo.orderMemo = currentValue;
+            currentInfo.orderMemo = currentValue.trim();
         }
         method.setOrderInfo(currentInfo);
     }
@@ -172,6 +188,7 @@ function OrderInfo({field, method}) {
 
     function checkPwd() {
         pwdValidRef.current.value = null;
+        pwdValidDescRef.current.classList.add('hidden');
 
         if (isSixDigits(pwdRef.current.value)) {
             pwdValidRef.current.disabled = false;
@@ -183,21 +200,42 @@ function OrderInfo({field, method}) {
 
     function checkNaN(e) {
         if (isNaN(e.key) || e.target.value.length > 5) {
-            e.target.value = '';
+            e.preventDefault();
+        }
+    }
+
+    function checkNull(e) {
+        if (e.keyCode == 32) {
+            e.preventDefault();
+        }
+    }
+
+    function checkOrderValid() {
+        const currentPassword = pwdRef.current.value;
+        const currentName = nameRef.current.value.trim();
+
+        if (currentName != '' && currentPassword.length == 6) {
+            method.setOrderActive(true);
+        } else {
+            method.setOrderActive(false);
         }
     }
 
     function checkPwdValid() {
-        const currentName = nameRef.current.value.trim();
         const currentPassword = pwdRef.current.value;
         const currentPasswordValid = pwdValidRef.current.value;
 
-        if (currentName != '' && currentPassword == currentPasswordValid) {
-            method.setOrderActive(true);
+
+        if (currentPassword == currentPasswordValid) {
             setProperty(currentPassword, 'orderPassword');
+            pwdValidDescRef.current.classList.add('valid');
+            pwdValidDescRef.current.innerHTML = '* 비밀번호가 일치합니다.';
 
         } else {
             method.setOrderActive(false);
+            pwdValidDescRef.current.classList.remove('valid');
+            pwdValidDescRef.current.classList.remove('hidden');
+            pwdValidDescRef.current.innerHTML = '* 비밀번호가 일치하지 않습니다.';
         }
     }
 
@@ -209,34 +247,43 @@ function OrderInfo({field, method}) {
             </div>
             <div className="order-customer item-table">
                 <div>
-                    <span>주문자명</span><input type="text" name="orderName"
-                                            ref={nameRef}
-                                            onChange={() => {
-                                                checkName()
-                                            }}
-                                            placeholder="이름(10자 이하)"/>
+                    <span>주문자명 *</span><input type="text" name="orderName"
+                                              ref={nameRef}
+                                              onChange={() => {
+                                                  checkName()
+                                                  checkOrderValid()
+                                              }}
+                                              onKeyPress={(e) => {
+                                                  checkNull(e.nativeEvent)
+                                              }}
+                                              placeholder="이름(10자 이하)"/>
                 </div>
                 <div>
-                    <span>비밀번호</span><input type="password" name="orderPassword"
-                                            ref={pwdRef}
-                                            onChange={() => {
-                                                checkPwd()
-                                            }}
-                                            onKeyPress={(e) => {
-                                                checkNaN(e.nativeEvent)
-                                            }}
-                                            placeholder="비밀번호 숫자 6자리"/>
+                    <span>비밀번호 *</span><input type="password" name="orderPassword"
+                                              ref={pwdRef}
+                                              onChange={() => {
+                                                  checkPwd()
+                                              }}
+                                              onKeyPress={(e) => {
+                                                  checkNaN(e.nativeEvent)
+                                                  checkNull(e.nativeEvent)
+                                              }}
+                                              placeholder="비밀번호 숫자 6자리"/>
+                    <span></span>
                 </div>
                 <div>
-                    <span>비밀번호 확인</span><input type="password" name="orderPasswordConfirm"
-                                               ref={pwdValidRef} disabled
-                                               onChange={() => {
-                                                   checkPwdValid()
-                                               }}
-                                               onKeyPress={(e) => {
-                                                   checkNaN(e.nativeEvent)
-                                               }}
-                                               placeholder="비밀번호 숫자 6자리 확인"/>
+                    <span>비밀번호 확인 *</span><input type="password" name="orderPasswordConfirm"
+                                                 ref={pwdValidRef} disabled
+                                                 onChange={() => {
+                                                     checkPwdValid()
+                                                     checkOrderValid()
+                                                 }}
+                                                 onKeyPress={(e) => {
+                                                     checkNaN(e.nativeEvent)
+                                                     checkNull(e.nativeEvent)
+                                                 }}
+                                                 placeholder="비밀번호 숫자 6자리 확인"/>
+                    <span ref={pwdValidDescRef} className={"order-validation hidden"}></span>
                 </div>
                 <div>
                     <span>메모</span><textarea name="orderMemo"
@@ -246,6 +293,7 @@ function OrderInfo({field, method}) {
                                              placeholder="요청사항 입력"/>
                 </div>
             </div>
+            <span className={"order-info-desc"}>'*' 표시된 부분은 필수 입력 사항입니다.</span>
         </div>
     )
 }

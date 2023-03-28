@@ -16,7 +16,7 @@
     background: linear-gradient(to bottom, rgba(1, 1, 1, 0.005), transparent);
 }
 
-.item-table-header > * {
+.item-table-header > *, .item-table-footer > * {
     font-weight: bolder;
 }
 
@@ -29,6 +29,14 @@
     background: linear-gradient(to bottom, rgba(1, 1, 1, 0.005), transparent);
 }
 
+.item-table-footer > *:first-child {
+    font-size: large;
+}
+
+.item-table-footer > *:last-child {
+    font-size: x-large;
+    background: linear-gradient(to top, gold 50%, transparent 50%);
+}
 
 .cart-item {
     box-shadow: 0 0px 3px rgba(1, 1, 1, 0.05);
@@ -117,13 +125,7 @@
 }
 
 .cart-total > *:first-child {
-    font-size: large;
     grid-column-start: 4;
-}
-
-.cart-total > *:last-child {
-    font-size: x-large;
-    background: linear-gradient(to top, gold 50%, transparent 50%);
 }
 
 .cart-item {
