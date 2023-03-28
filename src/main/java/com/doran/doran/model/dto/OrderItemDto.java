@@ -10,7 +10,10 @@ public class OrderItemDto extends ItemDto {
     private int optionId;
     private String optionName;
     private int optionQuantity;
-    private int optionPrice;
     private int optionUnitPrice;
     private int shotQuantity;
+
+    public int getOptionPrice() {
+        return optionQuantity * optionUnitPrice + shotQuantity * 1000;
+    }
 }

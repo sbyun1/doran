@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -37,6 +35,8 @@ public class Order {
     @JsonManagedReference
     private List<OrderItem> orderItems = new ArrayList<>();
 
+    private int orderTotalPrice = 0;
+
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus = OrderStatus.received;
 
@@ -47,17 +47,16 @@ public class Order {
 
     public void addOrderItems(OrderItem orderItem) {
         orderItems.add(orderItem);
+        orderTotalPrice += orderItem.getOrderOptionPrice();
         orderItem.setOrder(this);
     }
 
     public void setOrderDate() {
         orderDate = new Date();
     }
-}
 
-enum OrderStatus {
-    received,
-    inProgress,
-    finished,
-    rejected;
+    public Order(OrderInfo orderInfo) {
+        this.addOrderInfo(orderInfo);
+        this.setOrderDate(new Date());
+    }
 }

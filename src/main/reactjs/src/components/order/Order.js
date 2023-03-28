@@ -1,6 +1,6 @@
 import {useEffect, useRef, useState} from "react";
 import axios from "axios";
-import '../resources/css/order.css'
+import '../../resources/css/order/main.css'
 
 function Order() {
     const [paymentType, setPaymentType] = useState(null);
@@ -17,31 +17,24 @@ function Order() {
         setOrderInfo(initialInfo);
     }, []);
 
-    function placeAnOrder() {
+    function request() {
         if (paymentType != null && orderActive) {
             const data = {
                 orderInfo: orderInfo,
                 paymentType: paymentType
             }
-            axios.post('/order/place', data, {"Content-Type": 'application/json'}).then(
+            axios.post('/order/request', data, {"Content-Type": 'application/json'}).then(
                 response => {
                     if (response.data) {
-                        window.location.href = '/order/confirm';
+                        if (paymentType == 'payAfter') {
+                            window.location.href = '/order/complete';
+                        }
                     }
                 }
             )
         } else {
             alert('[필수 입력 사항] 및 [결제 방식]을 확인하신 후 다시 시도하세요.');
         }
-    }
-
-    function checkOrder() {
-        axios.get('/order/check').then(response => {
-            const data = response.data;
-            if (data.orderState) {
-                alert('주문이 완료되었습니다.');
-            }
-        });
     }
 
     return (
@@ -59,7 +52,7 @@ function Order() {
                     }/>
                     <input type={"button"} value={"결제하기"} onClick={
                         () => {
-                            placeAnOrder();
+                            request();
                         }
                     }/>
                 </div>
@@ -349,7 +342,7 @@ function Payment({field, method}) {
                                    onClick={(event) => {
                                        selectPaymentType(event);
                                    }}
-                                   value={"onSite"}/>
+                                   value={"payAfter"}/>
                             현장 결제
                         </label>
                     </div>

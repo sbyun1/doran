@@ -80,7 +80,7 @@ function Cart() {
                             alert("장바구니에 아이템이 없습니다.");
                             return false;
                         }
-                        window.location.href = "/order/pay"
+                        window.location.href = "/order/list"
                     }
                 }/>
             </div>

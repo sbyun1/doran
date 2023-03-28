@@ -1,5 +1,6 @@
 package com.doran.doran.model.entity;
 
+import com.doran.doran.model.dto.OrderInfoDto;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,4 +34,10 @@ public class OrderInfo {
     @JsonBackReference
     @JoinColumn(name = "orderId")
     private Order order;
+
+    public OrderInfo(OrderInfoDto dto) {
+        this.setOrderName(dto.getOrderName());
+        this.setOrderPassword(dto.getOrderPassword());
+        this.setOrderMemo(dto.getOrderMemo());
+    }
 }

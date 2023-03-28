@@ -1,4 +1,4 @@
-import '../resources/css/orderConfirm.css'
+import '../../resources/css/order/confirm.css'
 
 function OrderConfirm() {
     return (

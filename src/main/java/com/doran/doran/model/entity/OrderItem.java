@@ -1,5 +1,6 @@
 package com.doran.doran.model.entity;
 
+import com.doran.doran.model.dto.OrderItemDto;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,7 +24,16 @@ public class OrderItem {
     @ManyToOne
     @JsonBackReference
     @JoinColumn(name = "optionId")
-    private ProductOption orderItem;
+    private ProductOption orderOption;
     private int orderQuantity;
     private int orderShotQuantity;
+
+    private int orderOptionPrice = 0;
+
+    public OrderItem(ProductOption orderOption, OrderItemDto orderItemDto) {
+        this.setOrderOption(orderOption);
+        this.setOrderQuantity(orderItemDto.getOptionQuantity());
+        this.setOrderShotQuantity(orderItemDto.getShotQuantity());
+        this.setOrderOptionPrice(orderItemDto.getOptionPrice());
+    }
 }
