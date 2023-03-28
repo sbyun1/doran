@@ -79,6 +79,7 @@ public class OrderController {
 
             OrderInfo orderInfo = new OrderInfo(orderInfoDto);
             Order order = new Order(orderInfo);
+            order.setOrderSeq(orderService.getCurrentSequence(order.getOrderDate()) + 1);
 
             cart.forEach(cartItem -> {
                 ProductOption orderOption = productService.findOptionById(cartItem.getOptionId()).get();

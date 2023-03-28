@@ -28,12 +28,12 @@ public class OrderItem {
     private int orderQuantity;
     private int orderShotQuantity;
 
-    private int orderOptionPrice = 0;
+    private int orderItemPrice = 0;
 
     public OrderItem(ProductOption orderOption, OrderItemDto orderItemDto) {
         this.setOrderOption(orderOption);
         this.setOrderQuantity(orderItemDto.getOptionQuantity());
         this.setOrderShotQuantity(orderItemDto.getShotQuantity());
-        this.setOrderOptionPrice(orderItemDto.getOptionPrice());
+        this.setOrderItemPrice(orderItemDto.getOptionPrice());
     }
 }
