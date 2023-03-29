@@ -13,7 +13,7 @@ function Cart() {
         let currentAmount = 0;
 
         _cart.forEach(ci => {
-            currentAmount += ci.optionQuantity * ci.optionUnitPrice + ci.shotQuantity * 1000;
+            currentAmount += ci.optionQuantity * (ci.optionUnitPrice + ci.shotQuantity * 1000);
         });
 
         setTotalPrice(currentAmount);
@@ -69,12 +69,12 @@ function Cart() {
                 </div>
             </div>
             <div className={"cart-confirm"}>
-                <input type={"button"} value={"계속 담기"} onClick={
+                <input className={"style-button-confirm"} type={"button"} value={"계속 담기"} onClick={
                     () => {
                         window.location.href = "/"
                     }
                 }/>
-                <input type={"button"} value={"주문하기"} onClick={
+                <input className={"style-button-confirm"} type={"button"} value={"주문하기"} onClick={
                     () => {
                         if (isEmpty()) {
                             alert("장바구니에 아이템이 없습니다.");
@@ -125,6 +125,7 @@ class CartItem extends Component {
                     <div>
                         <span className={"item-option-label"}>옵션</span>
                         <span>{cartItem.optionName}</span>
+                        <span>{method.setCurrency(cartItem.optionUnitPrice)}원</span>
                     </div>
                     {
                         (cartItem.shotQuantity > 0)
@@ -133,6 +134,7 @@ class CartItem extends Component {
                             <div>
                                 <span className={"item-option-label"}>추가</span>
                                 <span>샷 추가 (+{cartItem.shotQuantity})</span>
+                                <span>{method.setCurrency(cartItem.shotQuantity * 1000)}원</span>
                             </div>
                         )
                     }
@@ -155,7 +157,7 @@ class CartItem extends Component {
                         setQuantity(+1, cartItem)
                     }}>+</span>
                 </div>
-                <span>{method.setCurrency(cartItem.optionUnitPrice * cartItem.optionQuantity + 1000 * cartItem.shotQuantity)}원</span>
+                <span>{method.setCurrency(cartItem.optionQuantity * (cartItem.optionUnitPrice + 1000 * cartItem.shotQuantity))}원</span>
                 <div className={"cart-item-discard"} onClick={() => {
                     removeCart(cartItem.orderItemId);
                     window.location.reload();

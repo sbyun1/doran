@@ -1,0 +1,83 @@
+.order-complete {
+    width: 1280px;
+    display: grid;
+    background-color: rgba(252, 252, 252);
+}
+
+.order-complete.top {
+    justify-items: center;
+    align-items: center;
+    gap: 50px;
+    padding: 100px 0 100px 0;
+}
+
+.order-complete-desc {
+    display: grid;
+    gap: 10px;
+    justify-items: center;
+    align-items: center;
+}
+
+.order-complete-desc > *:last-child {
+    font-size: small;
+}
+
+.order-confirm-link {
+    color: black;
+    font-weight: 700;
+    text-decoration: none;
+    background: linear-gradient(to top, gold 50%, transparent 50%);
+}
+
+.order-additional > div {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+    align-items: center;
+}
+
+.order-additional > div > *:last-child {
+    justify-self: left;
+}
+
+.order-additional-input {
+    padding: 10px 20px 10px 20px;
+}
+
+.order-number {
+    display: grid;
+    width: 100%;
+    gap: 10px;
+    justify-items: center;
+    align-items: center;
+}
+
+.order-number > *:first-child {
+    font-size: 25pt;
+}
+
+.order-number > *:last-child {
+    font-size: 100pt;
+}
+
+.order-code-container {
+    display: grid;
+    align-items: center;
+    position: relative;
+}
+
+.order-code-input {
+    position: absolute;
+    width: 85%;
+}
+
+.order-code-timer {
+    position: absolute;
+    right: 15%;
+    font-size: small;
+    color: red;
+}
+
+.order-code-timer.hidden {
+    display: none;
+}

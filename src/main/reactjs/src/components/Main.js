@@ -296,7 +296,7 @@ function Product({product}) {
                             </div>
                             <span>가격</span>
                             <span>{
-                                (orderQuantity * orderOption.optionPrice + 1000 * shotQuantity).toLocaleString("ko-KR", {maximumFractionDigits: 0})
+                                (orderQuantity * (orderOption.optionPrice + 1000 * shotQuantity)).toLocaleString("ko-KR", {maximumFractionDigits: 0})
                             }</span>
                         </div>
                     )
