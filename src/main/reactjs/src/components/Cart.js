@@ -69,12 +69,12 @@ function Cart() {
                 </div>
             </div>
             <div className={"cart-confirm"}>
-                <input type={"button"} value={"계속 담기"} onClick={
+                <input className={"style-button-confirm"} type={"button"} value={"계속 담기"} onClick={
                     () => {
                         window.location.href = "/"
                     }
                 }/>
-                <input type={"button"} value={"주문하기"} onClick={
+                <input className={"style-button-confirm"} type={"button"} value={"주문하기"} onClick={
                     () => {
                         if (isEmpty()) {
                             alert("장바구니에 아이템이 없습니다.");

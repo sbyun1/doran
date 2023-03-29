@@ -45,12 +45,12 @@ function Order() {
                            method={{setOrderInfo: setOrderInfo, setOrderActive: setOrderActive}}/>
                 <Payment field={{paymentType: paymentType}} method={{setPaymentType: setPaymentType}}/>
                 <div className={"cart-confirm"}>
-                    <input type={"button"} value={"장바구니"} onClick={
+                    <input className={"style-button-confirm"} type={"button"} value={"장바구니"} onClick={
                         () => {
                             window.history.back();
                         }
                     }/>
-                    <input type={"button"} value={"결제하기"} onClick={
+                    <input className={"style-button-confirm"} type={"button"} value={"결제하기"} onClick={
                         () => {
                             request();
                         }
