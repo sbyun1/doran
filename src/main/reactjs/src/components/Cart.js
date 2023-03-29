@@ -13,7 +13,7 @@ function Cart() {
         let currentAmount = 0;
 
         _cart.forEach(ci => {
-            currentAmount += ci.optionQuantity * ci.optionUnitPrice + ci.shotQuantity * 1000;
+            currentAmount += ci.optionQuantity * (ci.optionUnitPrice + ci.shotQuantity * 1000);
         });
 
         setTotalPrice(currentAmount);

@@ -14,6 +14,6 @@ public class OrderItemDto extends ItemDto {
     private int shotQuantity;
 
     public int getOptionPrice() {
-        return optionQuantity * optionUnitPrice + shotQuantity * 1000;
+        return optionQuantity * (optionUnitPrice + shotQuantity * 1000);
     }
 }

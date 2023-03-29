@@ -72,7 +72,7 @@ function OrderItems() {
         let currentVal = 0;
 
         _orderItems.forEach(oi => {
-            currentVal += oi.optionQuantity * oi.optionUnitPrice + oi.shotQuantity * 1000;
+            currentVal += oi.optionQuantity * (oi.optionUnitPrice + oi.shotQuantity * 1000);
         });
 
         setTotalPrice(currentVal);
@@ -117,7 +117,7 @@ function OrderItems() {
 
 function OrderItem({field, method}) {
     const orderItem = field.orderItem;
-    const orderPrice = orderItem.optionQuantity * orderItem.optionUnitPrice + orderItem.shotQuantity * 1000;
+    const orderPrice = orderItem.optionQuantity * (orderItem.optionUnitPrice + orderItem.shotQuantity * 1000);
 
     return (
         <div className={"order-item-figure"}>
