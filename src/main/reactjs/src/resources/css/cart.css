@@ -83,12 +83,16 @@
 
 .cart-item-option > div {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     justify-items: left;
     align-items: center;
     width: 100%;
     padding: 10px 100px 10px 20px;
     border-bottom: 1px solid rgba(1, 1, 1, 0.05);
+}
+
+.cart-item-option > div > *:last-child {
+    justify-self: end;
 }
 
 .item-option-label {
