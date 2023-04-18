@@ -96,6 +96,7 @@ function OrderBottom() {
             telBtnRef.current.disabled = false;
         } else {
             telBtnRef.current.disabled = true;
+            reset();
         }
     }
 
@@ -112,9 +113,31 @@ function OrderBottom() {
     function sendMessage() {
         // 세션 서버에 인증 정보가 저장된 후 타이머가 흐르도록 추후 구현
         reset();
-        setIsActive(true);
-        codeRef.current.disabled = false;
-        codeRef.current.focus();
+
+        axios.post("/order/sendMessage", {
+            orderTel: telRef.current.value
+        }).then(response => {
+            if (response.data) {
+                setIsActive(true);
+                codeRef.current.disabled = false;
+                codeRef.current.focus();
+            }
+        });
+    }
+
+    function checkToken() {
+        const data = {
+            orderTel: telRef.current.value,
+            tokenNum: codeRef.current.value
+        }
+        axios.post("/order/checkToken", data)
+            .then(response => {
+                if (response.data) {
+                    alert("인증 성공");
+                } else {
+                    alert("인증 실패");
+                }
+            })
     }
 
     useEffect(() => {
@@ -174,7 +197,11 @@ function OrderBottom() {
                             <span className={"order-code-timer"}>{setTimerText(seconds)}</span>
                         </div>
                         <input className={"order-additional-input style-button-confirm"} type={"button"}
-                               ref={codeBtnRef} value={"번호 확인"}/>
+                               ref={codeBtnRef} value={"번호 확인"}
+                               onClick={() => {
+                                   checkToken();
+                               }}
+                        />
                     </div>
                 </div>
             </div>

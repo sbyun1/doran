@@ -16,4 +16,5 @@ public class OrderInfoDto {
     @Pattern(regexp = "^\\d{6}$", message = "비밀번호는 6자리 숫자로 구성하세요.")
     private String orderPassword;
     private String orderMemo;
+    private String orderTel;
 }

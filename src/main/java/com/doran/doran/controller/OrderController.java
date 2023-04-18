@@ -1,27 +1,16 @@
 package com.doran.doran.controller;
 
-import com.doran.doran.model.dto.OrderDataDto;
-import com.doran.doran.model.dto.OrderInfoDto;
-import com.doran.doran.model.dto.OrderItemDto;
+import com.doran.doran.model.dto.*;
 import com.doran.doran.model.entity.*;
-import com.doran.doran.model.service.OrderService;
-import com.doran.doran.model.service.ProductService;
+import com.doran.doran.model.service.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.configurationprocessor.json.JSONArray;
 import org.springframework.boot.configurationprocessor.json.JSONException;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 @RestController
@@ -30,7 +19,11 @@ public class OrderController {
     @Autowired
     OrderService orderService;
     @Autowired
+    MessageService messageService;
+    @Autowired
     ProductService productService;
+    @Autowired
+    OrderTokenService orderTokenService;
     @Autowired
     PasswordEncoder passwordEncoder;
 
@@ -67,13 +60,13 @@ public class OrderController {
 
     @GetMapping("/check")
     public boolean checkOrder(HttpSession session) {
-        List<OrderItemDto> cart = (List<OrderItemDto>) session.getAttribute("cart");
-        OrderInfoDto orderInfoDto = (OrderInfoDto) session.getAttribute("orderInfo");
-        String paymentType = (String) session.getAttribute("paymentType");
-
-        boolean paymentStatus = (boolean) session.getAttribute("paymentStatus");
-
         try {
+            List<OrderItemDto> cart = (List<OrderItemDto>) session.getAttribute("cart");
+            OrderInfoDto orderInfoDto = (OrderInfoDto) session.getAttribute("orderInfo");
+            String paymentType = (String) session.getAttribute("paymentType");
+
+            boolean paymentStatus = (boolean) session.getAttribute("paymentStatus");
+
             if (paymentType == null || orderInfoDto == null || cart == null || !paymentStatus)
                 return false;
 
@@ -99,10 +92,29 @@ public class OrderController {
                 session.setAttribute("order", orderConfirm);
             }
         } catch (Exception e) {
-            e.printStackTrace();
             return false;
         }
 
         return true;
+    }
+
+    /*
+     * Naver SMS API와 연결하기 전
+     * Redis에 저장이 된 후 확인이 되는 것 까지
+     */
+    @PostMapping("/sendMessage")
+    public boolean sendMessage(@RequestBody OrderTokenDto data, HttpSession session) {
+        Order currentOrder = (Order) session.getAttribute("order");
+        data.setTokenNum(orderTokenService.createToken());
+
+        OrderToken orderToken = orderTokenService.save(1, data);
+
+        return !orderToken.equals(null);
+    }
+
+    @PostMapping("/checkToken")
+    public boolean checkToken(@RequestBody OrderTokenDto data, HttpSession session) {
+        Order currentOrder = (Order) session.getAttribute("order");
+        return orderTokenService.checkToken(1, data);
     }
 }
