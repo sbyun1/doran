@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @RestController
 @RequestMapping("/menu")
@@ -32,7 +33,7 @@ public class MainController {
             session.setAttribute("orderSeq", 0);
         }
 
-        Map<String, Object> res = new HashMap<>();
+        Map<String, Object> res = new ConcurrentHashMap<>();
 
         List<MenuItemDto> products = productService.findAll();
         List<CategoryDto> categories = categoryService.findAll();

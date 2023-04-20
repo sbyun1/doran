@@ -3,29 +3,31 @@ import axios from "axios";
 import '../../resources/css/order/complete.css'
 
 function OrderComplete() {
-    const [orderId, setOrderId] = useState();
-    const [certState, setCertState] = useState();
-
-    useEffect(() => {
-        axios.get('/order/check').then(response => {
-            const orderStatus = response.data;
-            if (orderStatus) {
-                console.log('주문 완료');
-            }
-        });
-    }, []);
+    const [orderSeq, setOrderSeq] = useState();
+    // const [certState, setCertState] = useState();
 
     return (
         <div className="main-container">
             <div className={"order-container"}>
-                <OrderTop/>
+                <OrderTop field={{orderSeq: orderSeq}} method={{setOrderSeq: setOrderSeq}}/>
                 <OrderBottom/>
             </div>
         </div>
     )
 }
 
-function OrderTop() {
+function OrderTop({field, method}) {
+    const orderSeq = field.orderSeq;
+    useEffect(() => {
+        axios.get('/order/check').then(response => {
+            const currentSeq = response.data;
+            if (currentSeq > 0) {
+                console.log(currentSeq)
+                method.setOrderSeq(currentSeq);
+            }
+        });
+    }, []);
+
     return (
         <>
             <div className={"order-top"}>
@@ -34,7 +36,7 @@ function OrderTop() {
             <div className={"order-complete top"}>
                 <div className={"order-number"}>
                     <span>주문번호</span>
-                    <span>1</span>
+                    <span>{orderSeq}</span>
                 </div>
                 <div className={"order-complete-desc"}>
                     <div>

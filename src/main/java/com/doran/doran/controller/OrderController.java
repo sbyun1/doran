@@ -64,7 +64,9 @@ public class OrderController {
     }
 
     @GetMapping("/check")
-    public boolean checkOrder(HttpSession session) {
+    public int checkOrder(HttpSession session) {
+        int orderSeq = 0;
+
         try {
             List<OrderItemDto> cart = (List<OrderItemDto>) session.getAttribute("cart");
             OrderInfoDto orderInfoDto = (OrderInfoDto) session.getAttribute("orderInfo");
@@ -73,11 +75,12 @@ public class OrderController {
             boolean paymentStatus = (boolean) session.getAttribute("paymentStatus");
 
             if (paymentType == null || orderInfoDto == null || cart == null || !paymentStatus)
-                return false;
+                return 0;
 
             OrderInfo orderInfo = new OrderInfo(orderInfoDto);
             Order order = new Order(orderInfo);
-            order.setOrderSeq(orderService.getCurrentSequence(order.getOrderDate()) + 1);
+            orderSeq = orderService.getCurrentSequence(order.getOrderDate()) + 1;
+            order.setOrderSeq(orderSeq);
 
             cart.forEach(cartItem -> {
                 ProductOption orderOption = productService.findOptionById(cartItem.getOptionId()).get();
@@ -90,8 +93,6 @@ public class OrderController {
 
             Order orderConfirm = orderService.save(order);
             if (orderConfirm != null) {
-                System.out.println(orderConfirm.getOrderId());
-
                 session.removeAttribute("cart");
                 session.removeAttribute("orderInfo");
                 session.removeAttribute("paymentType");
@@ -99,10 +100,10 @@ public class OrderController {
                 session.setAttribute("order", orderConfirm);
             }
         } catch (Exception e) {
-            return false;
+            return 0;
         }
 
-        return true;
+        return orderSeq;
     }
 
     /*
@@ -117,9 +118,9 @@ public class OrderController {
         OrderToken orderToken = orderTokenService.save(currentOrder.getOrderId(), data);
         boolean isSaved = !orderToken.equals(null);
 
-        if (isSaved) {
-            messageService.sendMessage(orderToken.getTokenNum(), orderToken.getOrderTel());
-        }
+//        if (isSaved) {
+//            messageService.sendMessage(orderToken.getTokenNum(), orderToken.getOrderTel());
+//        }
         return isSaved;
     }
 

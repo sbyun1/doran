@@ -21,7 +21,6 @@ public class Order {
     private int orderId;
 
     private int orderSeq;
-
     @Temporal(TemporalType.TIMESTAMP)
     private Date orderDate;
 
