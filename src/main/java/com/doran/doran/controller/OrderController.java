@@ -4,12 +4,17 @@ import com.doran.doran.model.dto.*;
 import com.doran.doran.model.entity.*;
 import com.doran.doran.model.service.*;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 
@@ -19,11 +24,11 @@ public class OrderController {
     @Autowired
     OrderService orderService;
     @Autowired
-    MessageService messageService;
-    @Autowired
     ProductService productService;
     @Autowired
     OrderTokenService orderTokenService;
+    @Autowired
+    MessageService messageService;
     @Autowired
     PasswordEncoder passwordEncoder;
 
@@ -105,12 +110,17 @@ public class OrderController {
      * Redis에 저장이 된 후 확인이 되는 것 까지
      */
     @PostMapping("/sendMessage")
-    public boolean sendMessage(@RequestBody OrderTokenDto data, HttpSession session) {
+    public boolean sendMessage(@RequestBody OrderTokenDto data, HttpSession session) throws UnsupportedEncodingException, NoSuchAlgorithmException, URISyntaxException, InvalidKeyException, JsonProcessingException {
         Order currentOrder = (Order) session.getAttribute("order");
         data.setTokenNum(orderTokenService.createToken());
 
         OrderToken orderToken = orderTokenService.save(currentOrder.getOrderId(), data);
-        return !orderToken.equals(null);
+        boolean isSaved = !orderToken.equals(null);
+
+        if (isSaved) {
+            messageService.sendMessage(orderToken.getTokenNum(), orderToken.getOrderTel());
+        }
+        return isSaved;
     }
 
     @PostMapping("/checkToken")
