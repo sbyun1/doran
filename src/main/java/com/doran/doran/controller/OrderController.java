@@ -85,6 +85,8 @@ public class OrderController {
 
             Order orderConfirm = orderService.save(order);
             if (orderConfirm != null) {
+                System.out.println(orderConfirm.getOrderId());
+
                 session.removeAttribute("cart");
                 session.removeAttribute("orderInfo");
                 session.removeAttribute("paymentType");
@@ -107,14 +109,22 @@ public class OrderController {
         Order currentOrder = (Order) session.getAttribute("order");
         data.setTokenNum(orderTokenService.createToken());
 
-        OrderToken orderToken = orderTokenService.save(1, data);
-
+        OrderToken orderToken = orderTokenService.save(currentOrder.getOrderId(), data);
         return !orderToken.equals(null);
     }
 
     @PostMapping("/checkToken")
     public boolean checkToken(@RequestBody OrderTokenDto data, HttpSession session) {
         Order currentOrder = (Order) session.getAttribute("order");
-        return orderTokenService.checkToken(1, data);
+        Order newOrder = null;
+
+        boolean isValid = orderTokenService.checkToken(currentOrder.getOrderId(), data);
+
+        if (isValid) {
+            currentOrder.getOrderInfo().setOrderTel(data.getOrderTel());
+            newOrder = orderService.save(currentOrder);
+        }
+        session.setAttribute("order", newOrder);
+        return isValid;
     }
 }

@@ -36,6 +36,11 @@
     align-items: center;
 }
 
+.order-additional > div:nth-child(2) {
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+
 .order-additional > div > *:last-child {
     justify-self: left;
 }
@@ -80,4 +85,19 @@
 
 .order-code-timer.hidden {
     display: none;
+}
+
+.order-code-valid {
+    position: absolute;
+    font-size: small;
+    left: 10px;
+    top: 30px;
+}
+
+.order-code-valid.incorrect {
+    color: red;
+}
+
+.style-button-confirm {
+    width: 120px;
 }

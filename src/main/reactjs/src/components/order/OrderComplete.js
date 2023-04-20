@@ -52,17 +52,20 @@ function OrderTop() {
 function OrderBottom() {
     const telRef = useRef(null);
     const telBtnRef = useRef(null);
+    /**/
     const codeRef = useRef(null);
     const codeBtnRef = useRef(null);
-
+    /**/
+    const validRef = useRef(null);
+    /**/
     const [seconds, setSeconds] = useState(180);
     const [isActive, setIsActive] = useState(false);
-
-    const [verifiedTel, setVerifiedTel] = useState(false);
+    const [isValid, setIsValid] = useState(false);
 
     function reset() {
         setSeconds(180);
         setIsActive(false);
+        setIsValid(false);
     }
 
     function setTimerText(count) {
@@ -71,10 +74,19 @@ function OrderBottom() {
     }
 
     function initRef() {
+        disableAllInput();
+        clearAllInput();
+    }
+
+    function disableAllInput() {
         telBtnRef.current.disabled = true;
         codeRef.current.disabled = true;
-        codeRef.current.value = '';
         codeBtnRef.current.disabled = true;
+    }
+
+    function clearAllInput() {
+        codeRef.current.value = '';
+        validRef.current.innerHTML = '';
     }
 
     function checkNaN(e, limit) {
@@ -121,23 +133,28 @@ function OrderBottom() {
                 setIsActive(true);
                 codeRef.current.disabled = false;
                 codeRef.current.focus();
+                validRef.current.innerHTML = '인증번호가 전송되었습니다.';
             }
         });
     }
 
     function checkToken() {
-        const data = {
-            orderTel: telRef.current.value,
-            tokenNum: codeRef.current.value
+        if (isActive) {
+            const data = {
+                orderTel: telRef.current.value,
+                tokenNum: codeRef.current.value
+            }
+            axios.post("/order/checkToken", data)
+                .then(response => {
+                    if (response.data) {
+                        alert("휴대폰 인증이 완료되었습니다.");
+                        setIsValid(true);
+                    } else {
+                        validRef.current.classList.add('incorrect');
+                        validRef.current.innerHTML = '인증번호가 일치하지 않습니다.';
+                    }
+                })
         }
-        axios.post("/order/checkToken", data)
-            .then(response => {
-                if (response.data) {
-                    alert("인증 성공");
-                } else {
-                    alert("인증 실패");
-                }
-            })
     }
 
     useEffect(() => {
@@ -145,16 +162,41 @@ function OrderBottom() {
     }, []);
 
     useEffect(() => {
-        let interval = null;
-        if (isActive) {
-            interval = setInterval(() => {
-                setSeconds(seconds => seconds - 1);
-            }, 1000);
-        } else if (!isActive && seconds !== 180) {
-            clearInterval(interval);
+        if (isValid) {
+            disableAllInput();
+            validRef.current.innerHTML = '';
         }
-        return () => clearInterval(interval);
-    }, [isActive, seconds]);
+    }, [isValid]);
+
+    const useInterval = (callback, delay) => {
+        const intervalRef = useRef();
+        const callbackRef = useRef(callback);
+
+        useEffect(() => {
+            callbackRef.current = callback;
+        }, [callback]);
+
+        useEffect(() => {
+            if (typeof delay === "number") {
+                intervalRef.current = setInterval(() => {
+                    callbackRef.current()
+                }, delay);
+            }
+            return () => clearInterval(intervalRef.current);
+        }, [delay]);
+
+        return intervalRef;
+    }
+
+    useInterval(() => {
+            let prev = seconds;
+            setSeconds(prev - 1);
+            if (prev === 1) {
+                alert("인증시간이 만료되었습니다. 재시도하세요.");
+                reset();
+            }
+        }, isActive && seconds && !isValid > 0 ? 1000 : null
+    );
 
     return (
         <>
@@ -166,7 +208,8 @@ function OrderBottom() {
                 <div className={"order-additional item-table"}>
                     <div>
                         <span>연락처</span>
-                        <input className={"order-additional-input"} type={"tel"} name={"orderTel"} ref={telRef}
+                        <input className={"order-additional-input"} inputMode="tel" name={"orderTel"}
+                               ref={telRef}
                                onKeyPress={(event) => {
                                    checkNaN(event.nativeEvent, 10);
                                    checkNull(event.nativeEvent);
@@ -184,7 +227,7 @@ function OrderBottom() {
                     <div>
                         <span>인증번호</span>
                         <div className={"order-code-container"}>
-                            <input className={"order-additional-input order-code-input"} type={"number"}
+                            <input className={"order-additional-input order-code-input"} inputMode="numeric"
                                    name={"orderTelCode"}
                                    ref={codeRef}
                                    onChange={() => {
@@ -195,6 +238,7 @@ function OrderBottom() {
                                        checkNull(event.nativeEvent);
                                    }} placeholder={"인증번호 6자리 입력"}/>
                             <span className={"order-code-timer"}>{setTimerText(seconds)}</span>
+                            <span className={"order-code-valid"} ref={validRef}></span>
                         </div>
                         <input className={"order-additional-input style-button-confirm"} type={"button"}
                                ref={codeBtnRef} value={"번호 확인"}
