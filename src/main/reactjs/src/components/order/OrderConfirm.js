@@ -1,5 +1,6 @@
 import '../../resources/css/order/confirm.css'
 import {useRef, useState} from "react";
+import axios from "axios";
 
 function OrderConfirm() {
     const [auth, setAuth] = useState(false);
@@ -43,7 +44,22 @@ function Before() {
         if (orderName === '' || orderSeq === '' || orderPwd === '') {
             return false;
         } else {
-            // 모든 정보가 입력된 경우 입력값을 서버로 보내주도록 구현
+            const orderInfo = {
+                orderName: orderName,
+                orderPassword: orderPwd
+            }
+            const data = {
+                orderInfo: orderInfo,
+                orderSeq: orderSeq
+            }
+
+            axios.post("/order/checkStatus", data).then(response => {
+                if (response.data) {
+                    alert("조회 성공")
+                } else {
+                    alert("조회 실패");
+                }
+            })
         }
     }
 
@@ -83,7 +99,9 @@ function Before() {
                     다시 한번 확인해 주시기 바랍니다.
                 </span>
                 <input className={"style-button-confirm"} type={"button"}
-                       value={"조회하기"} ref={confirmRef} disabled/>
+                       value={"조회하기"} ref={confirmRef} onClick={() => {
+                    checkForm();
+                }}/>
             </div>
         </div>
     )

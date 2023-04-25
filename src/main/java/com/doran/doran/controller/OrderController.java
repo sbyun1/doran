@@ -7,6 +7,8 @@ import com.doran.doran.model.service.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.configurationprocessor.json.JSONException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +18,8 @@ import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 @RestController
@@ -136,6 +140,28 @@ public class OrderController {
             newOrder = orderService.save(currentOrder);
         }
         session.setAttribute("order", newOrder);
+        return isValid;
+    }
+
+    @PostMapping("/checkStatus")
+    public boolean checkStatus(@RequestBody OrderDataDto data, HttpSession session) {
+        boolean isValid = false;
+
+        try {
+            Order order = orderService.findByOrderSeq(data.getOrderSeq());
+            OrderInfo responseInfo = order.getOrderInfo();
+
+            OrderInfoDto requestInfo = data.getOrderInfo();
+            if (passwordEncoder.matches(requestInfo.getOrderPassword(), responseInfo.getOrderPassword())
+                    && responseInfo.getOrderName().equals(requestInfo.getOrderName())) {
+                isValid = true;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            isValid = false;
+        }
+
         return isValid;
     }
 }
