@@ -1,5 +1,5 @@
 import '../../resources/css/order/confirm.css'
-import {useState} from "react";
+import {useRef, useState} from "react";
 
 function OrderConfirm() {
     const [auth, setAuth] = useState(false);
@@ -12,6 +12,41 @@ function OrderConfirm() {
 }
 
 function Before() {
+    const seqRef = useRef(null);
+    const nameRef = useRef(null);
+    const pwdRef = useRef(null);
+    const confirmRef = useRef(null);
+
+    const isSixDigits = (orderPwd) => {
+        return !!orderPwd.match(/^\d{6}$/);
+    }
+
+    function checkPwd() {
+        if (isSixDigits(pwdRef.current.value)) {
+            confirmRef.current.disabled = false;
+        } else {
+            confirmRef.current.disabled = true;
+        }
+    }
+
+    function checkNaN(e) {
+        if (isNaN(e.key) || e.target.value.length > 5) {
+            e.preventDefault();
+        }
+    }
+
+    function checkForm() {
+        const orderName = nameRef.current.value.trim();
+        const orderSeq = seqRef.current.value.trim();
+        const orderPwd = pwdRef.current.value.trim();
+
+        if (orderName === '' || orderSeq === '' || orderPwd === '') {
+            return false;
+        } else {
+            // 모든 정보가 입력된 경우 입력값을 서버로 보내주도록 구현
+        }
+    }
+
     return (
         <div className={"order-confirm"}>
             <div className={"order-top"}>
@@ -21,21 +56,34 @@ function Before() {
             <div className={"order-check"}>
                 <div>
                     <span>주문번호</span>
-                    <input name={"orderSeq"} inputMode={"numeric"}/>
+                    <input name={"orderSeq"} inputMode={"numeric"}
+                           ref={seqRef} onKeyPress={event => {
+                        checkNaN(event.nativeEvent)
+                    }}/>
                 </div>
                 <div>
                     <span>주문자명</span>
-                    <input name={"orderName"}/>
+                    <input name={"orderName"}
+                           ref={nameRef}/>
                 </div>
                 <div>
                     <span>비밀번호</span>
-                    <input name={"orderPassword"} type={"password"} inputMode={"numeric"}/>
+                    <input name={"orderPassword"} type={"password"}
+                           ref={pwdRef}
+                           onChange={() => {
+                               checkPwd()
+                           }}
+                           onKeyPress={event => {
+                               checkNaN(event.nativeEvent)
+                           }}
+                           inputMode={"numeric"}/>
                 </div>
                 <span className={"order-check-desc"}>
                     * 주문 정보 오 입력 시 주문 상태 확인 및 취소가 어려울 수 있으니
                     다시 한번 확인해 주시기 바랍니다.
                 </span>
-                <input className={"style-button-confirm"} type={"button"} value={"조회하기"}/>
+                <input className={"style-button-confirm"} type={"button"}
+                       value={"조회하기"} ref={confirmRef} disabled/>
             </div>
         </div>
     )
