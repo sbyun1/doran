@@ -2,9 +2,6 @@ package com.doran.doran.controller;
 
 import com.doran.doran.model.dto.OrderItemDto;
 import com.doran.doran.model.service.ProductService;
-import org.apache.coyote.Request;
-import org.aspectj.weaver.ast.Or;
-import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,8 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 @RestController

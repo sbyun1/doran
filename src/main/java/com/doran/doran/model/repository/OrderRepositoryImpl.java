@@ -2,18 +2,15 @@ package com.doran.doran.model.repository;
 
 import static com.doran.doran.model.entity.QOrder.order;
 
-import com.querydsl.core.QueryResults;
-import com.querydsl.core.Tuple;
+import com.doran.doran.model.entity.Order;
 import com.querydsl.core.types.ConstantImpl;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.StringTemplate;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 public class OrderRepositoryImpl implements OrderRepositoryCustom {
     @Autowired
@@ -29,12 +26,25 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
 
         String formattedCurrentDate = new SimpleDateFormat("yyyy-MM-dd").format(currentDate);
 
-        Long queryResults = jpaQueryFactory
-                .select(order.count())
+        Long queryResult = jpaQueryFactory
+                .select(formattedDate.count())
                 .from(order)
                 .where(formattedDate.eq(formattedCurrentDate))
                 .fetchOne();
 
-        return queryResults;
+        return queryResult;
+    }
+
+    @Override
+    public Order findByOrderSeq(int orderSeq) {
+        Order queryResult = jpaQueryFactory
+                .select(order)
+                .from(order)
+                .where(order.orderSeq.eq(orderSeq))
+                .orderBy(order.orderDate.desc())
+                .limit(1)
+                .fetchOne();
+
+        return queryResult;
     }
 }

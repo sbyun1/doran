@@ -27,14 +27,16 @@ public class ProductService {
     public List<MenuItemDto> findAll() {
         List<MenuItemDto> res = new ArrayList<MenuItemDto>();
         productRepository.findAll().forEach(p -> {
-            MenuItemDto dto = new MenuItemDto();
+            MenuItemDto dto = null;
 
             // Response로 보내기 적절한 타입으로 Entity를 Dto로 변환
-            dto.setCategoryName(p.getCategory().getCategoryName());
-            dto.setProductId(p.getProductId());
-            dto.setProductName(p.getProductName());
-            dto.setProductDesc(p.getProductDesc());
-            dto.setProductOptions(p.getOptions());
+            dto = dto.builder()
+                    .categoryName(p.getCategory().getCategoryName())
+                    .productId(p.getProductId())
+                    .productName(p.getProductName())
+                    .productDesc(p.getProductDesc())
+                    .productOptions(p.getOptions())
+                    .build();
 
             res.add(dto);
         });
@@ -45,14 +47,16 @@ public class ProductService {
         List<MenuItemDto> res = new ArrayList<>();
         Optional<Category> category = categoryRepository.findById(categoryId);
         productRepository.findByCategory(category).forEach(p -> {
-            MenuItemDto dto = new MenuItemDto();
+            MenuItemDto dto = null;
 
             // Response로 보내기 적절한 타입으로 Entity를 Dto로 변환
-            dto.setCategoryName(p.getCategory().getCategoryName());
-            dto.setProductId(p.getProductId());
-            dto.setProductName(p.getProductName());
-            dto.setProductDesc(p.getProductDesc());
-            dto.setProductOptions(p.getOptions());
+            dto = dto.builder()
+                    .categoryName(p.getCategory().getCategoryName())
+                    .productId(p.getProductId())
+                    .productName(p.getProductName())
+                    .productDesc(p.getProductDesc())
+                    .productOptions(p.getOptions())
+                    .build();
 
             res.add(dto);
         });
@@ -72,14 +76,16 @@ public class ProductService {
         }
 
         products.forEach(p -> {
-            MenuItemDto dto = new MenuItemDto();
+            MenuItemDto dto = null;
 
             // Response로 보내기 적절한 타입으로 Entity를 Dto로 변환
-            dto.setCategoryName(p.getCategory().getCategoryName());
-            dto.setProductId(p.getProductId());
-            dto.setProductName(p.getProductName());
-            dto.setProductDesc(p.getProductDesc());
-            dto.setProductOptions(p.getOptions());
+            dto = dto.builder()
+                    .categoryName(p.getCategory().getCategoryName())
+                    .productId(p.getProductId())
+                    .productName(p.getProductName())
+                    .productDesc(p.getProductDesc())
+                    .productOptions(p.getOptions())
+                    .build();
 
             res.add(dto);
         });
@@ -87,22 +93,24 @@ public class ProductService {
         return res;
     }
 
-    public Optional<ProductOption> findOptionById(Integer optionId){
+    public Optional<ProductOption> findOptionById(Integer optionId) {
         return productOptionRepository.findById(optionId);
     }
 
     public OrderItemDto findByOption(Integer optionId) {
         Optional<ProductOption> option = productOptionRepository.findById(optionId);
-        OrderItemDto dto = new OrderItemDto();
+        OrderItemDto dto = null;
 
         if (option.isPresent()) {
-            ProductOption productOption = option.get();
-
-            dto.setOptionId(productOption.getOptionId());
-            dto.setOptionName(productOption.getOptionName());
-            dto.setOptionUnitPrice(productOption.getOptionPrice());
-            dto.setProductId(productOption.getProduct().getProductId());
-            dto.setProductName(productOption.getProduct().getProductName());
+            ProductOption po = option.get();
+            dto = dto.builder()
+                    .optionId(po.getOptionId())
+                    .optionQuantity(po.getOptionId())
+                    .optionName(po.getOptionName())
+                    .optionUnitPrice(po.getOptionPrice())
+                    .productId(po.getProduct().getProductId())
+                    .productName(po.getProduct().getProductName())
+                    .build();
         }
 
         return dto;
