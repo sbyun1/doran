@@ -5,6 +5,7 @@ import com.doran.doran.model.entity.*;
 import com.doran.doran.model.service.*;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -53,6 +55,12 @@ public class OrderController {
             orderInfoDto.setOrderPassword(passwordEncoder.encode(orderInfoDto.getOrderPassword()));
             session.setAttribute("orderInfo", orderInfoDto);
 
+            /*
+             * 결제 방식이 현장 결제인 경우에만
+             * 결제 상태를 참으로 변경하고
+             * 아닌 경우(ex: 간편결제-카카오페이 선택 시)
+             * 결제가 완료된 후에 결제 상태를 변경하도록 구현
+             */
             if (paymentType.equals("payAfter")) {
                 paymentStatus = true;
             }
@@ -67,6 +75,11 @@ public class OrderController {
         return true;
     }
 
+    /*
+     * 주문자 정보가 확실하고,
+     * 주문 내역이 존재하며,
+     * 결제가 완료된 경우에만 DB에 저장하도록 구현
+     */
     @GetMapping("/check")
     public int checkOrder(HttpSession session) {
         int orderSeq = 0;
@@ -143,18 +156,20 @@ public class OrderController {
         return isValid;
     }
 
-    @PostMapping("/checkStatus")
-    public boolean checkStatus(@RequestBody OrderDataDto data, HttpSession session) {
+    @PostMapping("/checkAuth")
+    public boolean checkAuth(@RequestBody OrderDataDto data, HttpSession session) {
         boolean isValid = false;
 
         try {
-            Order order = orderService.findByOrderSeq(data.getOrderSeq());
+            Order order = orderService.findByOrderSeq(data.getOrderSeq(), data.getOrderDate());
             OrderInfo responseInfo = order.getOrderInfo();
 
             OrderInfoDto requestInfo = data.getOrderInfo();
             if (passwordEncoder.matches(requestInfo.getOrderPassword(), responseInfo.getOrderPassword())
                     && responseInfo.getOrderName().equals(requestInfo.getOrderName())) {
                 isValid = true;
+                // 세션에 현재 불러온 주문 정보를 저장
+                session.setAttribute("order", order);
             }
 
         } catch (Exception e) {

@@ -37,10 +37,8 @@
 }
 
 .order-status {
-    width: 1280px;
     display: grid;
     grid-template-columns: 30% 5% 30% 5% 30%;
-    gap: 10px;
 }
 
 .order-status > * {
@@ -79,7 +77,11 @@
     padding: 0 50px 0 50px;
 }
 
-.order-confirm > *{
+.order-confirm-result {
+    width: 1080px;
+}
+
+.order-confirm > * {
     margin-top: 50px;
 }
 
@@ -93,6 +95,10 @@
 .order-check > div {
     padding: 20px;
     border-block-end: 1px solid darkgrey;
+}
+
+.order-check > div > input {
+    width: 200px;
 }
 
 .order-check > .style-button-confirm {

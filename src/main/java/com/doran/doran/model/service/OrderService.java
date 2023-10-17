@@ -21,8 +21,8 @@ public class OrderService {
         return Integer.parseInt(String.valueOf(count));
     }
 
-    public Order findByOrderSeq(int orderSeq) {
-        Order res = orderRepository.findByOrderSeq(orderSeq);
+    public Order findByOrderSeq(int orderSeq, String orderDate) {
+        Order res = orderRepository.findByOrderSeq(orderSeq, orderDate);
         return res;
     }
 }
