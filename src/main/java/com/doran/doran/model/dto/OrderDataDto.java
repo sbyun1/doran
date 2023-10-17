@@ -6,7 +6,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Builder
 public class OrderDataDto {
     private String orderDate;
     private int orderSeq;

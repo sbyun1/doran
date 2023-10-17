@@ -3,30 +3,20 @@ import {useEffect, useRef, useState} from "react";
 import axios from "axios";
 
 function OrderConfirm() {
-    const [auth, setAuth] = useState(false);
 
     return (
         <div className="main-container order-confirm-back">
-            {
-                !auth && <Before field={{auth: auth}}
-                                 method={{setAuth: setAuth}}/>
-            }
-            {
-                auth && <After field={{auth: auth}}/>
-            }
-
+            <ConfirmElement/>
         </div>
     )
 }
 
-function Before({field, method}) {
+function ConfirmElement() {
     const dateRef = useRef(null);
     const seqRef = useRef(null);
     const nameRef = useRef(null);
     const pwdRef = useRef(null);
     const confirmRef = useRef(null);
-
-    const ordSeq = field.ordSeq;
 
     const isSixDigits = (orderPwd) => {
         return !!orderPwd.match(/^\d{6}$/);
@@ -46,9 +36,7 @@ function Before({field, method}) {
         }
     }
 
-    function checkForm({field, method}) {
-        const auth = field.auth;
-
+    function checkForm() {
         const orderDate = dateRef.current.value.trim();
         const orderName = nameRef.current.value.trim();
         const orderSeq = seqRef.current.value.trim();
@@ -70,12 +58,10 @@ function Before({field, method}) {
             axios.post("/order/checkAuth", data).then(response => {
                 if (response.data) {
                     alert("조회에 성공하였습니다.");
-                    method.setAuth(true);
-                    method.setOrdSeq(orderSeq);
+                    window.location.href = "/order/details";
 
                 } else {
                     alert("조회에 실패하였습니다.");
-                    method.setAuth(false);
                 }
             })
         }
@@ -94,7 +80,7 @@ function Before({field, method}) {
             <div className={"order-check"}>
                 <div>
                     <span>주문날짜</span>
-                    <input name={"orderDate"} type={"date"} ref={dateRef} max={new Date().toISOString().split("T")[0]}/>
+                    <input name={"orderDate"} type={"date"} ref={dateRef}/>
                 </div>
                 <div>
                     <span>주문번호</span>
@@ -126,78 +112,8 @@ function Before({field, method}) {
             </span>
                 <input className={"style-button-confirm"} type={"button"}
                        value={"조회하기"} ref={confirmRef} onClick={() => {
-                    checkForm({field, method});
+                    checkForm();
                 }}/>
-            </div>
-        </div>
-    )
-}
-
-function After({field}) {
-    const auth = field.auth;
-
-    return (
-        <div className={"order-confirm order-confirm-result"}>
-            <div className="order-top">
-                <span>주문정보</span>
-                <span>주문과 관련된 직접적인 문의는 카카오톡 채널 또는 전화 문의 부탁드립니다.</span>
-            </div>
-            <div className="order-info">
-                <div className="order-info-id">
-                    <span>주문번호</span>
-                    <div>
-                        <span>20230311-001</span>
-                    </div>
-                </div>
-                <div className="order-info-id">
-                    <span>주문자명</span>
-                    <div>
-                        <span>홍길동</span>
-                    </div>
-                </div>
-                <div className="order-info-products">
-                    <span>주문상품</span>
-                    <div className="products-list">
-                        <div>
-                            <span>상품명</span>
-                            <span>옵션</span>
-                            <span>수량</span>
-                        </div>
-                        <div>
-                            <span>아메리카노</span>
-                            <span>레귤러 (2샷)</span>
-                            <span>1</span>
-                        </div>
-                        <div>
-                            <span>계절 생과일 주스</span>
-                            <span></span>
-                            <span>1</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div className="order-bottom">
-                <span>주문상태</span>
-            </div>
-            <div className="order-status">
-                <div className="order-state current">
-                    <span>주문완료</span>
-                    <span>주문이 접수되었습니다.</span>
-                </div>
-                <div>
-                    <span>→</span>
-                </div>
-                <div className="order-state">
-                    <span>준비중</span>
-                    <span>주문된 상품을 준비 중입니다.</span>
-                </div>
-                <div>
-                    <span>→</span>
-                </div>
-                <div className="order-state">
-                    <span>픽업 가능</span>
-                    <span>상품이 준비 완료되었습니다.</span>
-                </div>
             </div>
         </div>
     )

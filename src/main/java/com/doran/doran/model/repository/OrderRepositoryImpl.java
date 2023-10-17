@@ -36,7 +36,7 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
     }
 
     @Override
-    public Order findByOrderSeq(int orderSeq, String orderDate) {
+    public Order findByOrderData(int orderSeq, String orderDate) {
         StringTemplate formattedDate = Expressions.stringTemplate(
                 "DATE_FORMAT({0}, {1})"
                 , order.orderDate

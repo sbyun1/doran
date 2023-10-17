@@ -5,7 +5,6 @@ import com.doran.doran.model.entity.*;
 import com.doran.doran.model.service.*;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.http.HttpStatus;
@@ -18,10 +17,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 
 @RestController
@@ -161,7 +157,7 @@ public class OrderController {
         boolean isValid = false;
 
         try {
-            Order order = orderService.findByOrderSeq(data.getOrderSeq(), data.getOrderDate());
+            Order order = orderService.findByOrderData(data.getOrderSeq(), data.getOrderDate());
             OrderInfo responseInfo = order.getOrderInfo();
 
             OrderInfoDto requestInfo = data.getOrderInfo();
@@ -179,4 +175,11 @@ public class OrderController {
 
         return isValid;
     }
+
+    @GetMapping("/getDetails")
+    public ResponseEntity<OrderDetailsDto> getOrderDetails(HttpSession session) {
+        OrderDetailsDto result = orderService.findOrderDetails((Order) session.getAttribute("order"));
+        return new ResponseEntity(result, HttpStatus.OK);
+    }
+
 }
