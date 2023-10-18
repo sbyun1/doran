@@ -68,7 +68,10 @@ function ConfirmElement() {
     }
 
     useEffect(() => {
-        dateRef.current.value = new Date().toISOString().split("T")[0];
+        const today = new Date();
+        const todayString = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+        dateRef.current.value = todayString;
+        dateRef.current.max = todayString;
     }, []);
 
     return (
