@@ -23,11 +23,11 @@ public class CartController {
 
         try {
             List<OrderItemDto> cart = (List<OrderItemDto>) session.getAttribute("cart");
-            int orderSeq = (int) session.getAttribute("orderSeq");
+            int cartSeq = (int) session.getAttribute("cartSeq");
 
             OrderItemDto item = productService.findByOption(newItem.getOptionId());
 
-            item.setOrderItemId(orderSeq + 1);
+            item.setOrderItemId(cartSeq + 1);
             item.setOptionQuantity(newItem.getOptionQuantity());
             item.setShotQuantity(newItem.getShotQuantity());
 
@@ -45,7 +45,7 @@ public class CartController {
             cart.add(index, item);
 
             session.setAttribute("cart", cart);
-            session.setAttribute("orderSeq", orderSeq + 1);
+            session.setAttribute("cartSeq", cartSeq + 1);
         } catch (
                 Exception e) {
             e.printStackTrace();
@@ -115,7 +115,7 @@ public class CartController {
         if (cart == null) {
             cart = new ArrayList<>();
             session.setAttribute("cart", cart);
-            session.setAttribute("orderSeq", 0);
+            session.setAttribute("cartSeq", 0);
         }
         return new ResponseEntity(cart, HttpStatus.OK);
     }
