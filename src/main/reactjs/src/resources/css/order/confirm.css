@@ -7,6 +7,8 @@
 
 .order-info > * > *:first-child {
     font-weight: 700;
+    font-size: large;
+    background: linear-gradient(to top, rgba(255, 218, 0, 0.5) 50%, transparent 50%);
 }
 
 .order-info {
@@ -29,18 +31,29 @@
 
 .products-list > * {
     display: grid;
-    grid-template-columns: 40% 40% 20%;
+    grid-template-columns: repeat(4, 1fr);
+    text-align: center;
+    border-bottom: 1px solid rgba(1, 1, 1, 0.05);
+    padding: 20px;
 }
 
 .products-list > *:first-child {
     font-weight: 700;
+    border-bottom: 1px solid rgba(1, 1, 1, 0.1);
+}
+
+.products-list > *:first-child > * {
+    font-weight: 700;
+}
+
+.item-details-option {
+    display: grid;
+    gap: 5px;
 }
 
 .order-status {
-    width: 1280px;
     display: grid;
     grid-template-columns: 30% 5% 30% 5% 30%;
-    gap: 10px;
 }
 
 .order-status > * {
@@ -79,7 +92,11 @@
     padding: 0 50px 0 50px;
 }
 
-.order-confirm > *{
+.order-confirm-result {
+    width: 1080px;
+}
+
+.order-confirm > * {
     margin-top: 50px;
 }
 
@@ -93,6 +110,10 @@
 .order-check > div {
     padding: 20px;
     border-block-end: 1px solid darkgrey;
+}
+
+.order-check > div > input {
+    width: 200px;
 }
 
 .order-check > .style-button-confirm {

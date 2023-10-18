@@ -36,12 +36,18 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
     }
 
     @Override
-    public Order findByOrderSeq(int orderSeq) {
+    public Order findByOrderData(int orderSeq, String orderDate) {
+        StringTemplate formattedDate = Expressions.stringTemplate(
+                "DATE_FORMAT({0}, {1})"
+                , order.orderDate
+                , ConstantImpl.create("%Y-%m-%d")
+        );
+
         Order queryResult = jpaQueryFactory
                 .select(order)
                 .from(order)
                 .where(order.orderSeq.eq(orderSeq))
-                .orderBy(order.orderDate.desc())
+                .where(formattedDate.eq(orderDate))
                 .limit(1)
                 .fetchOne();
 

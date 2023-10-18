@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -30,7 +29,7 @@ public class MainController {
         if (session.getAttribute("cart") == null) {
             List<OrderItemDto> newCart = new ArrayList<>();
             session.setAttribute("cart", newCart);
-            session.setAttribute("orderSeq", 0);
+            session.setAttribute("cartSeq", 0);
         }
 
         Map<String, Object> res = new ConcurrentHashMap<>();

@@ -7,5 +7,5 @@ import java.util.Date;
 public interface OrderRepositoryCustom {
     Long getCurrentSequence(Date currentDate);
 
-    Order findByOrderSeq(int orderSeq);
+    Order findByOrderData(int orderSeq, String orderDate);
 }

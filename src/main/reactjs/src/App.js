@@ -7,6 +7,7 @@ import OrderList from "./components/OrderList.js";
 import Header from './components/common/Header.js';
 import {BrowserRouter, Route, Routes, Link, Switch} from "react-router-dom";
 import OrderComplete from "./components/order/OrderComplete";
+import OrderDetails from "./components/order/OrderDetails";
 
 function App() {
     return (
@@ -19,6 +20,7 @@ function App() {
                     <Route exact path="/event" element={<Event/>}/>
                     <Route exact path="/order/list" element={<Order/>}/>
                     <Route exact path="/order/confirm" element={<OrderConfirm/>}/>
+                    <Route exact path="/order/details" element={<OrderDetails/>}/>
                     <Route exact path="/order/complete" element={<OrderComplete/>}/>
                     <Route exact path="/admin/orderlist" element={<OrderList/>}/>
                 </Routes>

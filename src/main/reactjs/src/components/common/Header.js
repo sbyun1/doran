@@ -8,16 +8,16 @@ function Header() {
                     <span className={"common-nav-logo"}>카페 도란</span>
                     <span onClick={() => {
                         window.location.href = '/'
-                    }}>Menu</span>
+                    }}>메뉴</span>
                     <span onClick={() => {
                         window.location.href = '/event'
-                    }}>Event</span>
+                    }}>이벤트</span>
                     <span onClick={() => {
                         window.location.href = '/cart'
-                    }}>Cart</span>
+                    }}>장바구니</span>
                     <span onClick={() => {
                         window.location.href = '/order/confirm'
-                    }}>Order</span>
+                    }}>주문조회</span>
                 </div>
             </div>
         </>)
